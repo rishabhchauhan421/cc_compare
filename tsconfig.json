@@ -8,8 +8,6 @@
       "dom.iterable",
       "esnext"
     ],
-    "outDir": "dist",
-    "rootDir": "src",
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
