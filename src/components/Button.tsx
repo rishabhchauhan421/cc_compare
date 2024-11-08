@@ -1,18 +1,34 @@
-import Link from 'next/link'
-import clsx from 'clsx'
+import * as Headless from '@headlessui/react'
+import { clsx } from 'clsx'
+import { Link } from './link'
 
-const variantStyles = {
-  primary:
-    'bg-zinc-800 font-semibold text-zinc-100 hover:bg-zinc-700 active:bg-zinc-800 active:text-zinc-100/70 dark:bg-zinc-700 dark:hover:bg-zinc-600 dark:active:bg-zinc-700 dark:active:text-zinc-100/70',
-  secondary:
-    'bg-zinc-50 font-medium text-zinc-900 hover:bg-zinc-100 active:bg-zinc-100 active:text-zinc-900/60 dark:bg-zinc-800/50 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-50 dark:active:bg-zinc-800/50 dark:active:text-zinc-50/70',
+const variants = {
+  primary: clsx(
+    'inline-flex items-center justify-center px-4 py-[calc(theme(spacing.2)-1px)]',
+    'rounded-full border border-transparent bg-gray-950 shadow-md',
+    'whitespace-nowrap text-base font-medium text-white',
+    'data-[disabled]:bg-gray-950 data-[hover]:bg-gray-800 data-[disabled]:opacity-40',
+  ),
+  secondary: clsx(
+    'relative inline-flex items-center justify-center px-4 py-[calc(theme(spacing.2)-1px)]',
+    'rounded-full border border-transparent bg-white/15 shadow-md ring-1 ring-[#D15052]/15',
+    'after:absolute after:inset-0 after:rounded-full after:shadow-[inset_0_0_2px_1px_#ffffff4d]',
+    'whitespace-nowrap text-base font-medium text-gray-950',
+    'data-[disabled]:bg-white/15 data-[hover]:bg-white/20 data-[disabled]:opacity-40',
+  ),
+  outline: clsx(
+    'inline-flex items-center justify-center px-2 py-[calc(theme(spacing.[1.5])-1px)]',
+    'rounded-lg border border-transparent shadow ring-1 ring-black/10',
+    'whitespace-nowrap text-sm font-medium text-gray-950',
+    'data-[disabled]:bg-transparent data-[hover]:bg-gray-50 data-[disabled]:opacity-40',
+  ),
 }
 
 type ButtonProps = {
-  variant?: keyof typeof variantStyles
+  variant?: keyof typeof variants
 } & (
-  | (React.ComponentPropsWithoutRef<'button'> & { href?: undefined })
   | React.ComponentPropsWithoutRef<typeof Link>
+  | (Headless.ButtonProps & { href?: undefined })
 )
 
 export function Button({
@@ -20,15 +36,11 @@ export function Button({
   className,
   ...props
 }: ButtonProps) {
-  className = clsx(
-    'inline-flex items-center gap-2 justify-center rounded-md py-2 px-3 text-sm outline-offset-2 transition active:transition-none',
-    variantStyles[variant],
-    className,
-  )
+  className = clsx(className, variants[variant])
 
-  return typeof props.href === 'undefined' ? (
-    <button className={className} {...props} />
-  ) : (
-    <Link className={className} {...props} />
-  )
+  if (typeof props.href === 'undefined') {
+    return <Headless.Button {...props} className={className} />
+  }
+
+  return <Link {...props} className={className} />
 }
