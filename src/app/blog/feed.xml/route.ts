@@ -1,6 +1,6 @@
 // import { image } from '@/sanity/image'
 // import { getPostsForFeed } from '@/sanity/queries'
-// import { Feed } from 'feed'
+import { Feed } from 'feed'
 // import assert from 'node:assert'
 
 // export async function GET(req: Request) {
@@ -64,4 +64,18 @@
 //   })
 // }
 
-export async function GET(request: Request) {}
+export async function GET(request: Request) {
+  let feed = new Feed({
+    title: 'The Radiant Blog',
+    id: 'https://example.com/',
+    copyright: `All rights reserved ${new Date().getFullYear()}`,
+  })
+
+  new Response(feed.rss2(), {
+    status: 200,
+    headers: {
+      'content-type': 'application/xml',
+      'cache-control': 's-maxage=31556952',
+    },
+  })
+}
