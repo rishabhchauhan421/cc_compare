@@ -14,7 +14,7 @@ import { PlusGrid, PlusGridItem, PlusGridRow } from './plus-grid'
 const links = [
   // { href: '/pricing', label: 'Pricing' },
   // { href: '/company', label: 'Company' },
-  { href: '/best-credit-card', label: 'Best Credit Cards' },
+  // { href: '/best-credit-card', label: 'Best Credit Cards' },
   { href: '/credit-card-compare', label: 'Compare Credit Cards' },
   // { href: '/blog', label: 'Blog' },
   // { href: '/login', label: 'Login' },

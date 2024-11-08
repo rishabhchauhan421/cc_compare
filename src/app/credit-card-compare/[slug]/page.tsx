@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react'
 
 import { Container } from '@/components/container'
+import { Footer } from '@/components/footer'
 import { GradientBackground } from '@/components/gradient'
 import { Navbar } from '@/components/navbar'
 import { Heading, Subheading } from '@/components/text'
@@ -20,9 +21,9 @@ export async function generateStaticParams() {
   })
 
   //take two credit cards and add -vs- between their slugs and create combinations
-  const slugs = creditCards.map((creditCard) => creditCard.slug)
-  const params = slugs.flatMap((slug1, index) => {
-    return slugs.slice(index + 1).map((slug2) => {
+  const slugs = creditCards.map((creditCard: any) => creditCard.slug)
+  const params = slugs.flatMap((slug1: string, index: any) => {
+    return slugs.slice(index + 1).map((slug2: string) => {
       return {
         slug: slug1 + '-vs-' + slug2,
       }
@@ -785,7 +786,9 @@ export default async function Post({ params: paramsPromise }: Args) {
         )} */}
         {/* </div> */}
         {/* </article> */}
+        <div className="mt-3"></div>
       </Container>
+      <Footer />
     </main>
   )
 }

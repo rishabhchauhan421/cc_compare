@@ -12,14 +12,13 @@ import { LogoTimeline } from '@/components/logo-timeline'
 import { Map } from '@/components/map'
 import { Navbar } from '@/components/navbar'
 import { Screenshot } from '@/components/screenshot'
-import { Testimonials } from '@/components/testimonials'
 import { Heading, Subheading } from '@/components/text'
 import { ChevronRightIcon } from '@heroicons/react/16/solid'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   description:
-    'Radiant helps you sell more by revealing sensitive information about your customers.',
+    'CreditSwami helps you explore credit card and spend to its full potential.',
 }
 
 function Hero() {
@@ -40,16 +39,16 @@ function Hero() {
         />
         <div className="pb-24 pt-16 sm:pb-32 sm:pt-24 md:pb-48 md:pt-32">
           <h1 className="font-display text-balance text-6xl/[0.9] font-medium tracking-tight text-gray-950 sm:text-8xl/[0.8] md:text-9xl/[0.8]">
-            Close every deal.
+            Smarter Choices for Your Wallet.
           </h1>
           <p className="mt-8 max-w-lg text-xl/7 font-medium text-gray-950/75 sm:text-2xl/8">
-            Radiant helps you sell more by revealing sensitive information about
-            your customers.
+            CreditSwami helps you with credit cards, hotel deals, points usage
+            etc.
           </p>
           <div className="mt-12 flex flex-col gap-x-6 gap-y-4 sm:flex-row">
-            <Button href="#">Get started</Button>
-            <Button variant="secondary" href="/pricing">
-              See pricing
+            <Button href="#">Compare Cards</Button>
+            <Button variant="secondary" href="#">
+              Compare Deals
             </Button>
           </div>
         </div>
@@ -198,13 +197,13 @@ export default function Home() {
         <Container className="mt-10">
           <LogoCloud />
         </Container>
-        <div className="bg-gradient-to-b from-white from-50% to-gray-100 py-32">
+        {/* <div className="bg-gradient-to-b from-white from-50% to-gray-100 py-32">
           <FeatureSection />
           <BentoSection />
-        </div>
-        <DarkBentoSection />
+        </div> */}
+        {/* <DarkBentoSection /> */}
       </main>
-      <Testimonials />
+      {/* <Testimonials /> */}
       <Footer />
     </div>
   )

@@ -12,17 +12,17 @@ function CallToAction() {
       <hgroup>
         <Subheading>Get started</Subheading>
         <p className="mt-6 text-3xl font-medium tracking-tight text-gray-950 sm:text-5xl">
-          Ready to dive in?
+          Want to spend?
           <br />
-          Start your free trial today.
+          Get awesome deals today.
         </p>
       </hgroup>
       <p className="mx-auto mt-6 max-w-xs text-sm/6 text-gray-500">
-        Get the cheat codes for selling and unlock your team&apos;s revenue
+        Get the cheat codes for spending wisely and unlock your card&apos;s full
         potential.
       </p>
       <div className="mt-6">
-        <Button className="w-full sm:w-auto" href="#">
+        <Button className="w-full sm:w-auto" href="/newsletter">
           Get started
         </Button>
       </div>
@@ -55,17 +55,19 @@ function Sitemap() {
       <div>
         <SitemapHeading>Product</SitemapHeading>
         <SitemapLinks>
-          <SitemapLink href="/pricing">Pricing</SitemapLink>
-          <SitemapLink href="#">Analysis</SitemapLink>
-          <SitemapLink href="#">API</SitemapLink>
+          <SitemapLink href="#">Credit Cards</SitemapLink>
+          <SitemapLink href="/compare-credit-cards">
+            Compare Credit Cards
+          </SitemapLink>
+          <SitemapLink href="#">Deals & Offers</SitemapLink>
         </SitemapLinks>
       </div>
       <div>
         <SitemapHeading>Company</SitemapHeading>
         <SitemapLinks>
           <SitemapLink href="#">Careers</SitemapLink>
-          <SitemapLink href="/blog">Blog</SitemapLink>
-          <SitemapLink href="/company">Company</SitemapLink>
+          <SitemapLink href="#">Blog</SitemapLink>
+          <SitemapLink href="#">Company</SitemapLink>
         </SitemapLinks>
       </div>
       <div>

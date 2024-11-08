@@ -12,27 +12,27 @@ export function LogoCloud({
     >
       <img
         alt="SavvyCal"
-        src="/logo-cloud/savvycal.svg"
+        src="/logo-cloud/amex.svg"
         className="h-9 max-sm:mx-auto sm:h-8 lg:h-12"
       />
       <img
         alt="Laravel"
-        src="/logo-cloud/laravel.svg"
+        src="/logo-cloud/visa.svg"
         className="h-9 max-sm:mx-auto sm:h-8 lg:h-12"
       />
       <img
         alt="Tuple"
-        src="/logo-cloud/tuple.svg"
+        src="/logo-cloud/mastercard.svg"
         className="h-9 max-sm:mx-auto sm:h-8 lg:h-12"
       />
       <img
-        alt="Transistor"
-        src="/logo-cloud/transistor.svg"
+        alt="Rupay"
+        src="/logo-cloud/rupay.svg"
         className="h-9 max-sm:mx-auto sm:h-8 lg:h-12"
       />
       <img
         alt="Statamic"
-        src="/logo-cloud/statamic.svg"
+        src="/logo-cloud/dinersclub.svg"
         className="h-9 max-sm:mx-auto sm:h-8 lg:h-12"
       />
     </div>
