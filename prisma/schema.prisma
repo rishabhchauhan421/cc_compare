@@ -21,6 +21,7 @@ model CreditCard{
   updatedAt                 DateTime                @updatedAt
   imageUrl                  String                  @default("")
   cardUrl                   String                  @default("")
+  introductoryOffers        String                  @default("")
   affiliateUrl              String                  @default("")
 
   slug                      String                  @unique
@@ -37,11 +38,11 @@ model CreditCard{
   //Eligibility
   minAgeSalaried            Int                     @default(18)
   maxAgeSalaried            Int                     @default(70)
-  NetSalarySalaried         Int                     @default(0)
+  minNetIncomeSalaried      Int                     @default(0)
 
   minAgeSelfEmployed        Int                     @default(18)
   maxAgeSelfEmployed        Int                     @default(70)
-  NetSalarySelfEmployed     Int                     @default(0)
+  minNetIncomeSelfEmployed  Int                     @default(0)
 
   joiningFee                Int                     @default(0)
   annualFee                 Int                     @default(0)
