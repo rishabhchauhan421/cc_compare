@@ -18,9 +18,9 @@ export default async function sitemap() {
     }) ?? []
 
   // ];
-  const allcomparisonUrls = await db.comparisonSlug.findMany({})
+  const comparisonSlug = await db.comparisonSlug.findMany({})
   const comparisonUrls =
-    allcomparisonUrls.map((comparison) => {
+    comparisonSlug.map((comparison) => {
       return {
         url: baseUrl + `/credit-card-compare/${comparison.slug}`,
         lastModified: comparison.updatedAt,
@@ -33,7 +33,7 @@ export default async function sitemap() {
       lastModified: new Date(),
     },
     ...creditCardUrls,
-    ...allcomparisonUrls,
+    ...comparisonUrls,
     // {
     //   url: `${baseUrl}/about-us`,
     //   lastModified: new Date(),
