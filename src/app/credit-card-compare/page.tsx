@@ -103,33 +103,6 @@ export default async function Post({ params: paramsPromise }: Args) {
   )
 }
 
-// export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
-//   const { slug = '' } = await paramsPromise
-//   const post = await queryPostBySlug({ slug })
-
-//   return generateMeta({ doc: post })
-// }
-
-// const queryPostBySlug = cache(async ({ slug }: { slug: string }) => {
-//   const { isEnabled: draft } = await draftMode()
-
-//   const payload = await getPayloadHMR({ config: configPromise })
-
-//   const result = await payload.find({
-//     collection: 'posts',
-//     draft,
-//     limit: 1,
-//     overrideAccess: draft,
-//     where: {
-//       slug: {
-//         equals: slug,
-//       },
-//     },
-//   })
-
-//   return result.docs?.[0] || null
-// })
-
 const items = [
   { id: 1 },
   // More items...
