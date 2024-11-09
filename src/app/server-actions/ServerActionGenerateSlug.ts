@@ -14,11 +14,11 @@ export async function ServerActionGenerateSlug() {
   const comparisonSlugs = await db.comparisonSlug.findMany({})
   console.log({ comparisonSlugs })
 
-  //   if (comparisonSlugs && comparisonSlugs.length > 0) {
-  //     comparisonSlugs.forEach((slug) => {
-  //       slugSet.add(slug.slug)
-  //     })
-  //   }
+  if (comparisonSlugs && comparisonSlugs.length > 0) {
+    comparisonSlugs.forEach((slug) => {
+      slugSet.add(slug.slug)
+    })
+  }
 
   creditcards.forEach((card1) => {
     creditcards.forEach(async (card2) => {
