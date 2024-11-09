@@ -114,6 +114,9 @@ model CreditCard{
   membershipAccorPlus               MembershipAccorPlus                   @default(NONE)
   membershipPostcardSunshineClub    MembershipPostcardSunshineClub        @default(NONE)
   membershipIPrefer                 MembershipIPrefer                     @default(NONE)
+
+  isDeleted                 Boolean                 @default(false)
+
 }
 
 enum Concierge{
@@ -198,4 +201,15 @@ enum CardMaterial{
   METAL
   PLASTIC
   DIGITAL
+}
+
+model ComparisonSlug{
+  comparisonSlugId  String                    @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt         DateTime                  @default(now())
+  updatedAt         DateTime                  @updatedAt
+
+  name              String                    @unique
+  slug              String                    @unique
+  isDeleted         Boolean                   @default(false)
+
 }
