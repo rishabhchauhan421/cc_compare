@@ -25,7 +25,8 @@
     "react-dom": "^18",
     "react-use-measure": "^2.1.1",
     "sanity": "^3.55.0",
-    "tailwind-merge": "^2.5.4"
+    "tailwind-merge": "^2.5.4",
+    "third-parties": "link:@next/third-parties"
   },
   "devDependencies": {
     "@types/node": "^20",
