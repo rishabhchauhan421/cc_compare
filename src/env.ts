@@ -106,7 +106,7 @@ export const env = createEnv({
     NODE_ENV: process.env.NODE_ENV,
     NEXT_PUBLIC_GOOGLE_TAG: process.env.NEXT_PUBLIC_GOOGLE_TAG,
     // From .env file
-    DATABASE_URI: process.env.DATABASE_URL,
+    DATABASE_URI: process.env.DATABASE_URI,
     // NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
     // NEXTAUTH_URL: process.env.NEXTAUTH_URL,
     // GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
