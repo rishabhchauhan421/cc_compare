@@ -1,5 +1,3 @@
-import { db } from '@/db/prismaDb'
-
 export default async function sitemap() {
   const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL
 
@@ -18,14 +16,14 @@ export default async function sitemap() {
   //   }) ?? []
 
   // ];
-  const comparisonSlug = await db.comparisonSlug.findMany({})
-  const comparisonUrls =
-    comparisonSlug.map((comparison) => {
-      return {
-        url: baseUrl + `/credit-card-compare/${comparison.slug}`,
-        lastModified: comparison.updatedAt,
-      }
-    }) ?? []
+  // const comparisonSlug = await db.comparisonSlug.findMany({})
+  // const comparisonUrls =
+  //   comparisonSlug.map((comparison) => {
+  //     return {
+  //       url: baseUrl + `/credit-card-compare/${comparison.slug}`,
+  //       lastModified: comparison.updatedAt,
+  //     }
+  //   }) ?? []
 
   return [
     {
@@ -33,7 +31,7 @@ export default async function sitemap() {
       lastModified: new Date(),
     },
     // ...creditCardUrls,
-    ...comparisonUrls,
+    // ...comparisonUrls,
     // {
     //   url: `${baseUrl}/about-us`,
     //   lastModified: new Date(),
