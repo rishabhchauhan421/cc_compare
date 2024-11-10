@@ -1,37 +1,38 @@
+import { db } from '@/db/prismaDb'
+
 export default async function sitemap() {
   const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL
 
   //Get All products from DB
-  // const creditcards = await db.creditCard.findMany({
-  //   where: {
-  //     isDeleted: false,
-  //   },
-  // })
-  // const creditCardUrls =
-  //   creditcards.map((creditCard) => {
-  //     return {
-  //       url: baseUrl + `/${creditCard.slug}/cc/${creditCard.id}`,
-  //       lastModified: creditCard.updatedAt,
-  //     }
-  //   }) ?? []
+  const creditcards = await db.creditCard.findMany({
+    where: {
+      isDeleted: false,
+    },
+  })
+  const creditCardUrls =
+    creditcards.map((creditCard) => {
+      return {
+        url: baseUrl + `/${creditCard.slug}/cc/${creditCard.id}`,
+        lastModified: creditCard.updatedAt,
+      }
+    }) ?? []
 
-  // ];
-  // const comparisonSlug = await db.comparisonSlug.findMany({})
-  // const comparisonUrls =
-  //   comparisonSlug.map((comparison) => {
-  //     return {
-  //       url: baseUrl + `/credit-card-compare/${comparison.slug}`,
-  //       lastModified: comparison.updatedAt,
-  //     }
-  //   }) ?? []
+  const comparisonSlug = await db.comparisonSlug.findMany({})
+  const comparisonUrls =
+    comparisonSlug.map((comparison) => {
+      return {
+        url: baseUrl + `/credit-card-compare/${comparison.slug}`,
+        lastModified: comparison.updatedAt,
+      }
+    }) ?? []
 
   return [
     {
       url: baseUrl,
       lastModified: new Date(),
     },
-    // ...creditCardUrls,
-    // ...comparisonUrls,
+    ...creditCardUrls,
+    ...comparisonUrls,
     // {
     //   url: `${baseUrl}/about-us`,
     //   lastModified: new Date(),
