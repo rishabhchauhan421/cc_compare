@@ -36,7 +36,7 @@ export async function ServerActionGenerateSlug() {
       await db.comparisonSlug.create({
         data: {
           slug: slug1,
-          name: `${card1.name} vs ${card2.name}`,
+          name: `${card1.name}-vs-${card2.name}`,
         },
       })
     })
