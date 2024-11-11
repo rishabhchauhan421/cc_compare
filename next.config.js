@@ -10,6 +10,7 @@ const nextConfig = {
   },
   env: {
     siteName: 'The Custom Crow',
+    seoBaseCountry: 'India',
   },
 }
 

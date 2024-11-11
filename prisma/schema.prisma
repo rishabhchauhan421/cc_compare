@@ -48,9 +48,9 @@ model CreditCard{
   annualFee                 Int                     @default(0)
   minAmountForAnnualFeeWaiver Int                   @default(0)
 
-  signupBonus               Int                     @default(0)
-  spendForBonus             Int                     @default(0)
-  timeForBonus              Int                     @default(0)
+  signupBonus               String                  @default("")
+  signupBonusValue          Int                     @default(0)
+  signupBonusTerms          String[]                @default([])
 
 
   loungeAccess              String[]
@@ -67,6 +67,7 @@ model CreditCard{
   fuelPointsPer100          Float                     @default(0)
   groceryPointsPer100       Float                     @default(0)
   utilityPointsPer100       Float                     @default(0)
+  insurancePointsPer100     Float                     @default(0)
 
 
   // Lounge Access
@@ -77,6 +78,7 @@ model CreditCard{
   domesticLounge            Int                     @default(0)
   internationalLounge       Int                     @default(0)
   globalLounge              Int                     @default(0)
+  loungeAccessTerms         String[]                @default([])
 
   domesticGuestLounge       Int                     @default(0)
   internationalGuestLounge  Int                     @default(0)
@@ -103,6 +105,7 @@ model CreditCard{
   fuelSurchargeMaxCashbackPerMonth      Float       @default(0)
   fuelSurchargeMaxCashbackPerQuater     Float       @default(0)
   fuelSurchargeMaxCashbackPerYear       Float       @default(0)
+  fuelwaiverterms         String[]                  @default([])
 
 
 
@@ -114,6 +117,7 @@ model CreditCard{
   membershipAccorPlus               MembershipAccorPlus                   @default(NONE)
   membershipPostcardSunshineClub    MembershipPostcardSunshineClub        @default(NONE)
   membershipIPrefer                 MembershipIPrefer                     @default(NONE)
+  membershipHertz                   MembershipHertz                       @default(NONE)
 
   isDeleted                 Boolean                 @default(false)
 
@@ -128,6 +132,7 @@ enum Concierge{
 
 enum MembershipTajEpicure{
   NONE
+  PLUS
   PREFFERED
   PRIVILEGED
 }
@@ -173,6 +178,12 @@ enum MembershipHiltonHonors{
   SILVER
   GOLD
   DIAMOND
+}
+enum MembershipHertz{
+  NONE
+  GOLD
+  FIVE_STAR
+  PRESIDENTS_CIRCLE
 }
 
 model NetworkBrand{

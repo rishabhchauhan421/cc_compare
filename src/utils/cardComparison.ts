@@ -13,6 +13,10 @@ export enum CreditCardAttributes {
 
   joiningFee,
   annualFee,
+  minAmountForAnnualFeeWaiver,
+  signupBonus,
+  signupBonusValue,
+  signupBonusTerms,
 
   pointValue,
   allPointsPer100Spent,
@@ -161,6 +165,40 @@ export class CardComparison {
         if (card1.annualFee < card2.annualFee)
           return { show: true, isCard1Better: true, isCard2Better: false }
         else return { show: true, isCard1Better: false, isCard2Better: true }
+
+      case CreditCardAttributes.minAmountForAnnualFeeWaiver:
+        if (
+          card1.minAmountForAnnualFeeWaiver === 0 &&
+          card2.minAmountForAnnualFeeWaiver === 0
+        )
+          return { show: false, isCard1Better: false, isCard2Better: false }
+        if (
+          card1.minAmountForAnnualFeeWaiver ===
+          card2.minAmountForAnnualFeeWaiver
+        )
+          return { show: true, isCard1Better: false, isCard2Better: false }
+        if (
+          card1.minAmountForAnnualFeeWaiver < card2.minAmountForAnnualFeeWaiver
+        )
+          return { show: true, isCard1Better: true, isCard2Better: false }
+        else return { show: true, isCard1Better: false, isCard2Better: true }
+
+      case CreditCardAttributes.signupBonusValue:
+        if (card1.signupBonusValue === 0 && card2.signupBonusValue === 0)
+          return { show: false, isCard1Better: false, isCard2Better: false }
+        if (card1.signupBonusValue === card2.signupBonusValue)
+          return { show: true, isCard1Better: false, isCard2Better: false }
+        if (card1.signupBonus > card2.signupBonus)
+          return { show: true, isCard1Better: true, isCard2Better: false }
+        else return { show: true, isCard1Better: false, isCard2Better: true }
+
+      case CreditCardAttributes.signupBonusTerms:
+        if (
+          card1.signupBonusTerms.length === 0 &&
+          card2.signupBonusTerms.length === 0
+        )
+          return { show: false, isCard1Better: false, isCard2Better: false }
+        else return { show: true, isCard1Better: false, isCard2Better: false }
 
       case CreditCardAttributes.domesticLounge:
         if (card1.domesticLounge === 0 && card2.domesticLounge === 0)

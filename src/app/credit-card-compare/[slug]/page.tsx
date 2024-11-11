@@ -6,10 +6,12 @@ import { GradientBackground } from '@/components/gradient'
 import { Navbar } from '@/components/navbar'
 import { Heading, Subheading } from '@/components/text'
 import { db } from '@/db/prismaDb'
+import { env } from '@/env'
 import { CardComparison, CreditCardAttributes } from '@/utils/cardComparison'
 import { HotelUtils } from '@/utils/hotelUtils'
 import { toTitleCase } from '@/utils/toTitleCase'
 import dayjs from 'dayjs'
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
@@ -73,15 +75,27 @@ export default async function Post({ params: paramsPromise }: Args) {
     return notFound()
   }
 
+  const recentCreditCards = await db.creditCard.findMany({
+    take: 11,
+    orderBy: {
+      updatedAt: 'desc',
+    },
+  })
+
   const card1 = creditCards[0]
   const card2 = creditCards[1]
-
+  console.log(card1.travelPointsPer100, card2.travelPointsPer100)
   // Calcualtion
 
   const cardMaterialResult = CardComparison.compareCards({
     card1,
     card2,
     attr: CreditCardAttributes.cardMaterial,
+  })
+  const isInviteOnlyResult = CardComparison.compareCards({
+    card1,
+    card2,
+    attr: CreditCardAttributes.isInviteOnly,
   })
   const minAgeSalariedResult = CardComparison.compareCards({
     card1,
@@ -123,6 +137,24 @@ export default async function Post({ params: paramsPromise }: Args) {
     card1,
     card2,
     attr: CreditCardAttributes.annualFee,
+  })
+
+  const minAmountForAnnualFeeWaiverResult = CardComparison.compareCards({
+    card1,
+    card2,
+    attr: CreditCardAttributes.minAmountForAnnualFeeWaiver,
+  })
+
+  const signupBonusValueResult = CardComparison.compareCards({
+    card1,
+    card2,
+    attr: CreditCardAttributes.signupBonusValue,
+  })
+
+  const signupBonusTermsResult = CardComparison.compareCards({
+    card1,
+    card2,
+    attr: CreditCardAttributes.signupBonusTerms,
   })
 
   // const pointValueResult = CardComparison.compareCards({
@@ -227,15 +259,12 @@ export default async function Post({ params: paramsPromise }: Args) {
         <Heading as="h1" className="mt-2">
           {card1.name} vs {card2.name}
         </Heading>
-
         {/* <article className="pb-16 pt-16"> */}
         {/* TODO:  Add Breadcrumbs */}
-
         {/* <div className="flex flex-col items-center gap-4 pt-8"> */}
         {/* <ComparisonCard heading={'Travel'}>
           <ComparisonItem heading="Annual Fee" item1="₹5000" item2="₹10000" isItem1Better={true} />
         </ComparisonCard> */}
-
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="sm:flex sm:items-center">
             <div className="sm:flex-auto">
@@ -280,11 +309,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                     </tr>
                   </thead>
                   <ComparisonCard>
-                    <ComparisonItemRowFullWidth
-                      key={'basicWidth'}
-                      value={'Basic Information'}
-                    />
-                    <ComparisonItemRow key={'basic-1'}>
+                    <ComparisonItemRowFullWidth value={'Basic Information'} />
+                    <ComparisonItemRow>
                       <ComparisonItemHeadingCell value={'Network'} />
                       <ComparisonItemContentBoth
                         value1={card1.networkBrand.name}
@@ -293,7 +319,7 @@ export default async function Post({ params: paramsPromise }: Args) {
                         isCard2Better={false}
                       />
                     </ComparisonItemRow>
-                    <ComparisonItemRow key={'basic-2'}>
+                    <ComparisonItemRow>
                       <ComparisonItemHeadingCell value={'Material'} />
                       <ComparisonItemContentBoth
                         value1={toTitleCase(card1.cardMaterial)}
@@ -302,17 +328,19 @@ export default async function Post({ params: paramsPromise }: Args) {
                         isCard2Better={cardMaterialResult.isCard2Better}
                       />
                     </ComparisonItemRow>
-                    <ComparisonItemRow key={'basic-3'}>
-                      <ComparisonItemHeadingCell
-                        value={'Requires Invitation'}
-                      />
-                      <ComparisonItemContentBoth
-                        value1={card1.isInviteOnly ? 'Yes' : 'No'}
-                        value2={card2.isInviteOnly ? 'Yes' : 'No'}
-                        isCard1Better={true}
-                        isCard2Better={false}
-                      />
-                    </ComparisonItemRow>
+                    {isInviteOnlyResult.show && (
+                      <ComparisonItemRow key={'basic-3'}>
+                        <ComparisonItemHeadingCell
+                          value={'Requires Invitation'}
+                        />
+                        <ComparisonItemContentBoth
+                          value1={card1.isInviteOnly ? 'Yes' : 'No'}
+                          value2={card2.isInviteOnly ? 'Yes' : 'No'}
+                          isCard1Better={isInviteOnlyResult.isCard1Better}
+                          isCard2Better={isInviteOnlyResult.isCard2Better}
+                        />
+                      </ComparisonItemRow>
+                    )}
                   </ComparisonCard>
 
                   <ComparisonCard>
@@ -339,8 +367,16 @@ export default async function Post({ params: paramsPromise }: Args) {
                           value={'Maximum Age Salaried'}
                         />
                         <ComparisonItemContentBoth
-                          value1={card1.maxAgeSalaried.toString()}
-                          value2={card2.maxAgeSalaried.toString()}
+                          value1={
+                            card1.maxAgeSalaried === 100
+                              ? 'Not Specified'
+                              : card1.maxAgeSalaried.toString()
+                          }
+                          value2={
+                            card2.maxAgeSalaried === 100
+                              ? 'Not Specified'
+                              : card2.maxAgeSalaried.toString()
+                          }
                           isCard1Better={maxAgeSalariedResult.isCard1Better}
                           isCard2Better={maxAgeSalariedResult.isCard2Better}
                         />
@@ -517,11 +553,13 @@ export default async function Post({ params: paramsPromise }: Args) {
 
                   <ComparisonCard>
                     <ComparisonItemRowFullWidth
-                      key={'fees'}
+                      // key={'fees'}
                       value={'Fees and Charges'}
                     />
                     {joiningFeeResult.show && (
-                      <ComparisonItemRow key={'fees-1'}>
+                      <ComparisonItemRow
+                      // key={'fees-1'}
+                      >
                         <ComparisonItemHeadingCell value={'Joining Fee'} />
                         <ComparisonItemContentBoth
                           value1={'₹' + card1.joiningFee}
@@ -531,8 +569,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                         />
                       </ComparisonItemRow>
                     )}
-                    {joiningFeeResult.show && (
-                      <ComparisonItemRow key={'fees-2'}>
+                    {annualFeeResult.show && (
+                      <ComparisonItemRow key={'annual-fee'}>
                         <ComparisonItemHeadingCell value={'Annual Fee'} />
                         <ComparisonItemContentBoth
                           value1={'₹' + card1.annualFee}
@@ -542,26 +580,259 @@ export default async function Post({ params: paramsPromise }: Args) {
                         />
                       </ComparisonItemRow>
                     )}
-                    <ComparisonItemRow key={'basic-2'}>
-                      <ComparisonItemHeadingCell value={'Material'} />
-                      <ComparisonItemContentBoth
-                        value1={toTitleCase(card1.cardMaterial)}
-                        value2={toTitleCase(card2.cardMaterial)}
-                        isCard1Better={cardMaterialResult.isCard1Better}
-                        isCard2Better={cardMaterialResult.isCard2Better}
-                      />
-                    </ComparisonItemRow>
-                    <ComparisonItemRow key={'basic-3'}>
-                      <ComparisonItemHeadingCell
-                        value={'Requires Invitation'}
-                      />
-                      <ComparisonItemContentBoth
-                        value1={card1.isInviteOnly ? 'Yes' : 'No'}
-                        value2={card2.isInviteOnly ? 'Yes' : 'No'}
-                        isCard1Better={true}
-                        isCard2Better={false}
-                      />
-                    </ComparisonItemRow>
+                    {minAmountForAnnualFeeWaiverResult.show && (
+                      <ComparisonItemRow key={'annual-fee-waiver'}>
+                        <ComparisonItemHeadingCell
+                          value={'Minimum amount for Annual Fee waiver'}
+                        />
+                        <ComparisonItemContentBoth
+                          value1={'₹' + card1.minAmountForAnnualFeeWaiver}
+                          value2={'₹' + card2.minAmountForAnnualFeeWaiver}
+                          isCard1Better={
+                            minAmountForAnnualFeeWaiverResult.isCard1Better
+                          }
+                          isCard2Better={
+                            minAmountForAnnualFeeWaiverResult.isCard2Better
+                          }
+                        />
+                      </ComparisonItemRow>
+                    )}
+                    {signupBonusValueResult.show && (
+                      <>
+                        <ComparisonItemRow key={'signup Bonus'}>
+                          <ComparisonItemHeadingCell
+                            value={'Welcome/Signup Bonus'}
+                          />
+                          <ComparisonItemContentBoth
+                            value1={
+                              card1.signupBonus.length === 0
+                                ? 'None'
+                                : card1.signupBonus
+                            }
+                            value2={
+                              card2.signupBonus.length === 0
+                                ? 'None'
+                                : card2.signupBonus
+                            }
+                            isCard1Better={signupBonusValueResult.isCard1Better}
+                            isCard2Better={signupBonusValueResult.isCard2Better}
+                          />
+                        </ComparisonItemRow>
+                        <ComparisonItemRow key={'signup Bonus Value'}>
+                          <ComparisonItemHeadingCell value={'Bonus Value'} />
+                          <ComparisonItemContentBoth
+                            value1={'₹' + card1.signupBonusValue.toString()}
+                            value2={'₹' + card2.signupBonusValue.toString()}
+                            isCard1Better={signupBonusValueResult.isCard1Better}
+                            isCard2Better={signupBonusValueResult.isCard2Better}
+                          />
+                        </ComparisonItemRow>
+                      </>
+                    )}
+                    {signupBonusTermsResult.show && (
+                      <ComparisonItemRow key={'signup Bonus'}>
+                        <ComparisonItemHeadingCell
+                          value={'Signup Bonus Terms'}
+                        />
+                        <ComparisonItemContentBoth
+                          value1={''}
+                          value2={''}
+                          value1Array={card1.signupBonusTerms}
+                          value2Array={card2.signupBonusTerms}
+                          isCard1Better={signupBonusTermsResult.isCard1Better}
+                          isCard2Better={signupBonusTermsResult.isCard2Better}
+                        />
+                      </ComparisonItemRow>
+                    )}
+                  </ComparisonCard>
+
+                  <ComparisonCard>
+                    <ComparisonItemRowFullWidth
+                      key={'airport lounge access'}
+                      value={'Airport Lounge Access'}
+                    />
+                    {(card1.domesticLounge > 0 || card2.domesticLounge > 0) && (
+                      <ComparisonItemRow key={'airport-longue'}>
+                        <ComparisonItemHeadingCell
+                          value={'Available Domestic Lounge'}
+                        />
+                        <ComparisonItemContentBoth
+                          value1={
+                            card1.domesticLounge === 1000000000
+                              ? 'Unlimited'
+                              : card1.domesticLounge.toString()
+                          }
+                          value2={
+                            card2.domesticLounge === 1000000000
+                              ? 'Unlimited'
+                              : card2.domesticLounge.toString()
+                          }
+                          isCard1Better={
+                            card1.domesticLounge > card2.domesticLounge
+                          }
+                          isCard2Better={
+                            card2.domesticLounge > card1.domesticLounge
+                          }
+                        />
+                      </ComparisonItemRow>
+                    )}
+                    {(card1.internationalLounge > 0 ||
+                      card2.internationalLounge > 0) && (
+                      <ComparisonItemRow key={'airport-longue'}>
+                        <ComparisonItemHeadingCell
+                          value={'Available International Lounge'}
+                        />
+                        <ComparisonItemContentBoth
+                          value1={
+                            card1.internationalLounge === 1000000000
+                              ? 'Unlimited'
+                              : card1.internationalLounge.toString()
+                          }
+                          value2={
+                            card2.internationalLounge === 1000000000
+                              ? 'Unlimited'
+                              : card2.internationalLounge.toString()
+                          }
+                          isCard1Better={
+                            card1.internationalLounge >
+                            card2.internationalLounge
+                          }
+                          isCard2Better={
+                            card2.internationalLounge >
+                            card1.internationalLounge
+                          }
+                        />
+                      </ComparisonItemRow>
+                    )}
+                    {(card1.globalLounge > 0 || card2.globalLounge > 0) && (
+                      <ComparisonItemRow key={'airport-longue'}>
+                        <ComparisonItemHeadingCell
+                          value={'Available Global Lounge'}
+                        />
+                        <ComparisonItemContentBoth
+                          value1={
+                            card1.globalLounge === 1000000000
+                              ? 'Unlimited'
+                              : card1.globalLounge.toString()
+                          }
+                          value2={
+                            card2.globalLounge === 1000000000
+                              ? 'Unlimited'
+                              : card2.globalLounge.toString()
+                          }
+                          isCard1Better={
+                            card1.globalLounge > card2.globalLounge
+                          }
+                          isCard2Better={
+                            card2.globalLounge > card1.globalLounge
+                          }
+                        />
+                      </ComparisonItemRow>
+                    )}
+                    {(card1.domesticGuestLounge > 0 ||
+                      card2.domesticGuestLounge > 0) && (
+                      <ComparisonItemRow key={'airport-longue-domestic-guest'}>
+                        <ComparisonItemHeadingCell
+                          value={'Available Domestic Lounge for Guest'}
+                        />
+                        <ComparisonItemContentBoth
+                          value1={
+                            card1.domesticGuestLounge === 1000000000
+                              ? 'Unlimited'
+                              : card1.domesticGuestLounge.toString()
+                          }
+                          value2={
+                            card2.domesticGuestLounge === 1000000000
+                              ? 'Unlimited'
+                              : card2.domesticGuestLounge.toString()
+                          }
+                          isCard1Better={
+                            card1.domesticGuestLounge >
+                            card2.domesticGuestLounge
+                          }
+                          isCard2Better={
+                            card2.domesticGuestLounge >
+                            card1.domesticGuestLounge
+                          }
+                        />
+                      </ComparisonItemRow>
+                    )}
+                    {(card1.internationalGuestLounge > 0 ||
+                      card2.internationalGuestLounge > 0) && (
+                      <ComparisonItemRow
+                        key={'airport-longue-international-guest'}
+                      >
+                        <ComparisonItemHeadingCell
+                          value={'Available International Lounge for Guest'}
+                        />
+                        <ComparisonItemContentBoth
+                          value1={
+                            card1.internationalGuestLounge === 1000000000
+                              ? 'Unlimited'
+                              : card1.internationalGuestLounge.toString()
+                          }
+                          value2={
+                            card2.internationalGuestLounge === 1000000000
+                              ? 'Unlimited'
+                              : card2.internationalGuestLounge.toString()
+                          }
+                          isCard1Better={
+                            card1.internationalGuestLounge >
+                            card2.internationalGuestLounge
+                          }
+                          isCard2Better={
+                            card2.internationalGuestLounge >
+                            card1.internationalGuestLounge
+                          }
+                        />
+                      </ComparisonItemRow>
+                    )}
+                    {(card1.globalGuestLounge > 0 ||
+                      card2.globalGuestLounge > 0) && (
+                      <ComparisonItemRow
+                        key={'airport-longue-international-guest'}
+                      >
+                        <ComparisonItemHeadingCell
+                          value={'Available Global Lounge for Guest'}
+                        />
+                        <ComparisonItemContentBoth
+                          value1={
+                            card1.globalGuestLounge === 1000000000
+                              ? 'Unlimited'
+                              : card1.globalGuestLounge.toString()
+                          }
+                          value2={
+                            card2.globalGuestLounge === 1000000000
+                              ? 'Unlimited'
+                              : card2.globalGuestLounge.toString()
+                          }
+                          isCard1Better={
+                            card1.globalGuestLounge > card2.globalGuestLounge
+                          }
+                          isCard2Better={
+                            card2.globalGuestLounge > card1.globalGuestLounge
+                          }
+                        />
+                      </ComparisonItemRow>
+                    )}
+                    {(card1.loungeAccessTerms.length > 0 ||
+                      card2.loungeAccessTerms.length > 0) && (
+                      <ComparisonItemRow key={'lounge-terms'}>
+                        <ComparisonItemHeadingCell value={'Lounge Terms'} />
+                        <ComparisonItemContentBoth
+                          value1={''}
+                          value2={''}
+                          value1Array={card1.loungeAccessTerms}
+                          value2Array={card2.loungeAccessTerms}
+                          isCard1Better={
+                            card1.globalGuestLounge > card2.globalGuestLounge
+                          }
+                          isCard2Better={
+                            card2.globalGuestLounge > card1.globalGuestLounge
+                          }
+                        />
+                      </ComparisonItemRow>
+                    )}
                   </ComparisonCard>
 
                   <ComparisonCard>
@@ -723,13 +994,27 @@ export default async function Post({ params: paramsPromise }: Args) {
                       </ComparisonItemRow>
                     )}
                   </ComparisonCard>
+
                   <ComparisonCard>
                     <ComparisonItemRowFullWidth
-                      key={'Intro Offers'}
-                      value={'Intro Offers'}
+                      key={'Intro-Offers'}
+                      value={'Offers'}
                     />
+
+                    <ComparisonItemRow key={'intro-offers-1'}>
+                      <ComparisonItemHeadingCell value={'Perks'} />
+                      <ComparisonItemContentBoth
+                        value1={''}
+                        value2={''}
+                        value1Array={card1.perks}
+                        value2Array={card2.perks}
+                        isCard1Better={introductoryOffersResult.isCard1Better}
+                        isCard2Better={introductoryOffersResult.isCard2Better}
+                      />
+                    </ComparisonItemRow>
+
                     {introductoryOffersResult.show && (
-                      <ComparisonItemRow key={'intro-offers'}>
+                      <ComparisonItemRow key={'intro-offers-2'}>
                         <ComparisonItemHeadingCell
                           value={'Introductory Offers'}
                         />
@@ -777,6 +1062,38 @@ export default async function Post({ params: paramsPromise }: Args) {
             </div>
           </div>
         </div>
+        <div>
+          <div className="mt-8">
+            <h2 className="text-3xl font-semibold text-gray-900">
+              Related Comparison
+            </h2>
+            {/* <p className="mt-1 max-w-2xl text-sm/6 text-gray-500">
+              Personal details and application.
+            </p> */}
+          </div>
+          <div className="mt-6 border-t border-gray-100 font-semibold">
+            <ol className="list-decimal">
+              {recentCreditCards.map(
+                (card) =>
+                  card.id !== card1.id && (
+                    <li key={card.id} className="py-1">
+                      <Link
+                        href={`/credit-card-compare/${card1.slug}-vs-${card.slug}`}
+                      >
+                        <div className="flex items-center justify-between space-x-4">
+                          <div className="min-w-0 flex-1">
+                            <div className="text-sm/6 font-semibold text-gray-800">
+                              {card1.name} vs {card.name}
+                            </div>
+                          </div>
+                        </div>
+                      </Link>
+                    </li>
+                  ),
+              )}
+            </ol>
+          </div>
+        </div>
 
         {/* {post.relatedPosts && post.relatedPosts.length > 0 && (
           <RelatedPosts
@@ -799,6 +1116,75 @@ export default async function Post({ params: paramsPromise }: Args) {
 
 //   return generateMeta({ doc: post })
 // }
+
+export async function generateMetadata({
+  params: paramsPromise,
+}: Args): Promise<Metadata> {
+  const { slug = '' } = await paramsPromise
+  const url = '/credit-card-compare/' + slug
+
+  // if slug contains vs
+  const isValidCompareSlug = slug.includes('vs')
+  if (!isValidCompareSlug) {
+    return notFound()
+  }
+
+  const creditCardSlugs = slug.split('-vs-')
+  const creditCards = await db.creditCard.findMany({
+    where: {
+      slug: {
+        in: creditCardSlugs,
+      },
+    },
+    include: {
+      networkBrand: true,
+    },
+  })
+
+  if (creditCards.length !== 2) {
+    return notFound()
+  }
+  const card1 = creditCards[0]
+  const card2 = creditCards[1]
+
+  const possibleSlug = [
+    `${card1.slug}-vs-${card2.slug}`,
+    `${card2.slug}-vs-${card1.slug}`,
+  ]
+  const comparisonSlug = await db.comparisonSlug.findFirst({
+    where: {
+      slug: {
+        in: possibleSlug,
+      },
+    },
+  })
+
+  return {
+    title: `${creditCards[0].name} vs ${creditCards[1].name} | Compare Credit Cards | ${env.NEXT_PUBLIC_siteName}`,
+    description: `Discover how ${card1.name} and ${card2.name} stack up against each other in terms of cashback, annual fees, and exclusive perks. Make an informed choice for your wallet with our detailed comparison.`,
+    authors: {
+      name: `Rishabh Chauhan`,
+      // url: `${env.NEXT_PUBLIC_BASE_URL}/artist/${product.user.username}`,
+    },
+    alternates: {
+      canonical: `${env.NEXT_PUBLIC_BASE_URL}/credit-card-compare/${comparisonSlug?.slug}`,
+    },
+    keywords: [...creditCards[0].tags, ...creditCards[1].tags],
+    publisher: process.env.siteName,
+    openGraph: {
+      type: 'website',
+      title: `${creditCards[0].name} vs ${creditCards[1].name} | Compare Credit Cards | ${env.NEXT_PUBLIC_siteName}`,
+      description: `Discover how ${card1.name} and ${card2.name} stack up against each other in terms of cashback, annual fees, and exclusive perks.`,
+      countryName: process.env.seoBaseCountry,
+      url: `${env.NEXT_PUBLIC_BASE_URL}/credit-card-compare/${card1.slug}-vs-${card2.slug}`,
+      images: [
+        {
+          url: card1.imageUrl,
+        },
+      ],
+    },
+  }
+}
 
 // const queryPostBySlug = cache(async ({ slug }: { slug: string }) => {
 //   const { isEnabled: draft } = await draftMode()
@@ -832,15 +1218,9 @@ const ComparisonCard = ({ children }: { children: React.ReactNode }) => {
   )
 }
 
-const ComparisonItemRowFullWidth = ({
-  key,
-  value,
-}: {
-  key: string
-  value: String
-}) => {
+const ComparisonItemRowFullWidth = ({ value }: { value: String }) => {
   return (
-    <tr className="border-t border-gray-200" key={key}>
+    <tr className="border-t border-gray-200">
       <th
         scope="colgroup"
         colSpan={3}
@@ -851,18 +1231,8 @@ const ComparisonItemRowFullWidth = ({
     </tr>
   )
 }
-const ComparisonItemRow = ({
-  key,
-  children,
-}: {
-  key: string
-  children: React.ReactNode
-}) => {
-  return (
-    <tr className="border-t border-gray-200" key={key}>
-      {children}
-    </tr>
-  )
+const ComparisonItemRow = ({ children }: { children: React.ReactNode }) => {
+  return <tr className="border-t border-gray-200">{children}</tr>
 }
 const ComparisonItemHeadingCell = ({ value }: { value: String }) => {
   return <td className="text-md font-medium text-gray-900 sm:pl-3">{value}</td>
@@ -870,11 +1240,15 @@ const ComparisonItemHeadingCell = ({ value }: { value: String }) => {
 const ComparisonItemContentBoth = ({
   value1,
   value2,
+  value1Array,
+  value2Array,
   isCard1Better,
   isCard2Better,
 }: {
   value1: String
   value2: String
+  value1Array?: String[]
+  value2Array?: String[]
   isCard1Better: Boolean
   isCard2Better: Boolean
 }) => {
@@ -884,23 +1258,33 @@ const ComparisonItemContentBoth = ({
     <>
       <td
         key=""
-        className={
-          'whitespace-normal break-words px-3 py-4 text-sm text-gray-500 sm:truncate sm:whitespace-nowrap ' +
-          card1Formatting
-        }
-        style={{ maxWidth: '150px' }}
+        className={'px-3 py-4 text-sm text-gray-500 ' + card1Formatting}
+        style={{ maxWidth: '120px' }}
       >
-        {value1}
+        {value1Array && value1Array.length > 0 ? (
+          <ul className="list-disc">
+            {value1Array.map((item, index) => (
+              <li key={index}>{item}</li>
+            ))}
+          </ul>
+        ) : (
+          value1
+        )}
       </td>
       <td
         key="23"
-        className={
-          'break-wordspy-4 whitespace-normal text-sm text-gray-500 sm:truncate sm:whitespace-nowrap ' +
-          card2Formatting
-        }
-        style={{ maxWidth: '150px' }}
+        className={'text-sm text-gray-500 ' + card2Formatting}
+        style={{ maxWidth: '120px' }}
       >
-        {value2}
+        {value2Array && value2Array.length > 0 ? (
+          <ul className="list-disc">
+            {value2Array.map((item, index) => (
+              <li key={index}>{item}</li>
+            ))}
+          </ul>
+        ) : (
+          value2
+        )}
       </td>
     </>
   )

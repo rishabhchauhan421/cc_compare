@@ -8,7 +8,6 @@ export const env = createEnv({
    */
   server: {
     DATABASE_URI: z.string().url(),
-
     NODE_ENV: z.enum(['development', 'test', 'production']),
 
     // Auth Constraints
@@ -53,7 +52,7 @@ export const env = createEnv({
    * 💡 You'll get type errors if these are not prefixed with NEXT_PUBLIC_.
    */
   client: {
-    // NEXT_PUBLIC_BASE_URL: z.string().url(),
+    NEXT_PUBLIC_BASE_URL: z.string().url(),
     // NEXT_PUBLIC_ANNOUNCEMENT: z.string().min(1).max(49),
     // NEXT_PUBLIC_MINIMUM_CART_VALUE_FOR_FREE_SHIPPING: z.coerce.number().min(0),
     // NEXT_PUBLIC_MINIMUM_CART_VALUE_FOR_COD: z.coerce.number().min(0),
@@ -66,7 +65,7 @@ export const env = createEnv({
     NEXT_PUBLIC_GOOGLE_TAG: z.string().min(1),
 
     // next.config.js variables
-    // NEXT_PUBLIC_siteName: z.string().min(1),
+    NEXT_PUBLIC_siteName: z.string().min(1),
     // NEXT_PUBLIC_siteNameCamelCase: z.string().min(1),
     // NEXT_PUBLIC_siteNameCapitalCase: z.string().min(1),
     // NEXT_PUBLIC_OpenGraphSiteName: z.string().min(1),
@@ -75,7 +74,7 @@ export const env = createEnv({
     // NEXT_PUBLIC_seoSiteBannerImage: z.string().min(1),
     // NEXT_PUBLIC_seoProductNotFoundTitleTitle: z.string().min(1),
     // NEXT_PUBLIC_seoProductNotFoundDescription: z.string().min(1),
-    // NEXT_PUBLIC_seoBaseCountry: z.string().min(1),
+    NEXT_PUBLIC_seoBaseCountry: z.string().min(1),
     // NEXT_PUBLIC_pageTitleSuffix: z.string().min(1),
     // NEXT_PUBLIC_siteDescription: z.string().min(1),
     // NEXT_PUBLIC_seoSiteDescription: z.string().min(1),
@@ -135,7 +134,7 @@ export const env = createEnv({
     // ZOHO_NOREPLY_PASSWORD: process.env.ZOHO_NOREPLY_PASSWORD,
     // RESEND_API_KEY: process.env.RESEND_API_KEY,
 
-    // NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
+    NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
     // NEXT_PUBLIC_ANNOUNCEMENT: process.env.NEXT_PUBLIC_ANNOUNCEMENT,
     // NEXT_PUBLIC_MINIMUM_CART_VALUE_FOR_FREE_SHIPPING:
     // process.env.NEXT_PUBLIC_MINIMUM_CART_VALUE_FOR_FREE_SHIPPING,
@@ -147,7 +146,7 @@ export const env = createEnv({
     // NEXT_PUBLIC_SHIPPING_COST: process.env.NEXT_PUBLIC_SHIPPING_COST,
 
     // // From next.config.js
-    // NEXT_PUBLIC_siteName: process.env.siteName,
+    NEXT_PUBLIC_siteName: process.env.siteName,
     //     NEXT_PUBLIC_siteNameCamelCase: process.env.siteNameCamelCase,
     //     NEXT_PUBLIC_siteNameCapitalCase: process.env.siteNameCapitalCase,
     //     NEXT_PUBLIC_OpenGraphSiteName: process.env.OpenGraphSiteName,
@@ -156,7 +155,7 @@ export const env = createEnv({
     //     NEXT_PUBLIC_seoSiteBannerImage: process.env.seoSiteBannerImage,
     //     NEXT_PUBLIC_seoProductNotFoundTitleTitle: process.env.seoProductNotFoundTitleTitle,
     //     NEXT_PUBLIC_seoProductNotFoundDescription: process.env.seoProductNotFoundDescription,
-    //     NEXT_PUBLIC_seoBaseCountry: process.env.seoBaseCountry,
+    NEXT_PUBLIC_seoBaseCountry: process.env.seoBaseCountry,
     //     NEXT_PUBLIC_pageTitleSuffix: process.env.pageTitleSuffix,
     //     NEXT_PUBLIC_siteDescription: process.env.siteDescription,
     //     NEXT_PUBLIC_seoSiteDescription: process.env.seoSiteDescription,

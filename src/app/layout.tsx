@@ -29,7 +29,10 @@ export default function RootLayout({
           href="/blog/feed.xml"
         />
       </head>
-
+      <meta
+        name="google-site-verification"
+        content="Sa-JDpuOdp1UJSTb4Q-rjdQ7gc3eClWba2A4TClDbj4"
+      />
       <GoogleTagManager gtmId={env.NEXT_PUBLIC_GOOGLE_TAG} />
       <body className="text-gray-950 antialiased">{children}</body>
     </html>
