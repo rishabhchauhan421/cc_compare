@@ -1273,7 +1273,7 @@ const ComparisonItemContentBoth = ({
       </td>
       <td
         key="23"
-        className={'text-sm text-gray-500 ' + card2Formatting}
+        className={'px-3 py-4 text-sm text-gray-500 ' + card2Formatting}
         style={{ maxWidth: '120px' }}
       >
         {value2Array && value2Array.length > 0 ? (

@@ -119,7 +119,12 @@ model CreditCard{
   membershipIPrefer                 MembershipIPrefer                     @default(NONE)
   membershipHertz                   MembershipHertz                       @default(NONE)
 
+  lostCardLiability                 Int                                   @default(0)
+
+  milestones                        String[]                              @default([])
+
   isDeleted                 Boolean                 @default(false)
+  isDiscontinued            Boolean                 @default(false)
 
 }
 
