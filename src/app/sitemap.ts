@@ -1,7 +1,8 @@
 import { db } from '@/db/prismaDb'
+import { env } from '@/env'
 
 export default async function sitemap() {
-  const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL
+  const baseUrl = env.NEXT_PUBLIC_BASE_URL
 
   //Get All products from DB
   const creditcards = await db.creditCard.findMany({
