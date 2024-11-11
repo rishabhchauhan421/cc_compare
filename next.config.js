@@ -11,6 +11,7 @@ const nextConfig = {
   env: {
     siteName: 'The Custom Crow',
     seoBaseCountry: 'India',
+    supportEmail: 'help@thecustomcrow.com',
   },
 }
 

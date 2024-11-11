@@ -1160,7 +1160,7 @@ export async function generateMetadata({
   })
 
   return {
-    title: `${creditCards[0].name} vs ${creditCards[1].name} | Compare Credit Cards | ${env.NEXT_PUBLIC_siteName}`,
+    title: `${creditCards[0].name} vs ${creditCards[1].name}: Which is better| CS`,
     description: `Discover how ${card1.name} and ${card2.name} stack up against each other in terms of cashback, annual fees, and exclusive perks. Make an informed choice for your wallet with our detailed comparison.`,
     authors: {
       name: `Rishabh Chauhan`,
@@ -1169,19 +1169,24 @@ export async function generateMetadata({
     alternates: {
       canonical: `${env.NEXT_PUBLIC_BASE_URL}/credit-card-compare/${comparisonSlug?.slug}`,
     },
-    keywords: [...creditCards[0].tags, ...creditCards[1].tags],
+    keywords: [
+      `${card1.name} vs ${card2.name}`,
+      ...creditCards[0].tags,
+      ...creditCards[1].tags,
+    ],
     publisher: process.env.siteName,
     openGraph: {
       type: 'website',
-      title: `${creditCards[0].name} vs ${creditCards[1].name} | Compare Credit Cards | ${env.NEXT_PUBLIC_siteName}`,
+      title: `${creditCards[0].name} vs ${creditCards[1].name}: Which is better| CS`,
       description: `Discover how ${card1.name} and ${card2.name} stack up against each other in terms of cashback, annual fees, and exclusive perks.`,
       countryName: process.env.seoBaseCountry,
-      url: `${env.NEXT_PUBLIC_BASE_URL}/credit-card-compare/${card1.slug}-vs-${card2.slug}`,
+      url: `${env.NEXT_PUBLIC_BASE_URL}/credit-card-compare/${comparisonSlug?.slug}`,
       images: [
         {
           url: card1.imageUrl,
         },
       ],
+      siteName: `CardSwami.com`,
     },
   }
 }
