@@ -68,6 +68,11 @@ model CreditCard{
   groceryPointsPer100       Float                     @default(0)
   utilityPointsPer100       Float                     @default(0)
   insurancePointsPer100     Float                     @default(0)
+  governmentPointsPer100    Float                     @default(0)
+  rentPointsPer100          Float                     @default(0)
+  emiPointsPer100           Float                     @default(0)
+
+  pointsConversion          String[]                @default([])
 
 
   // Lounge Access
@@ -91,13 +96,17 @@ model CreditCard{
 
   domesticGolfGamesPerQuater      Int                     @default(0)
   internationalGolfGamesPerQuater Int                     @default(0)
+  domesticGolfLessionsPerMonth    Int                     @default(0)
+  internationalGolfLessionsPerMonth Int                   @default(0)
 
-  concierge             Concierge               @default(NONE)
+  concierge                 Concierge                   @default(NONE)
 
-  swiggyOne               Int                     @default(0)
-  mmtBlack                Int                     @default(0)
-  amazonPrime             Int                     @default(0)
-  timesPrime              Int                     @default(0)
+  swiggyOneOffer               String               @default("") 
+  mmtBlackOffer                String               @default("")      
+  amazonPrimeOffer             String               @default("")       
+  timesPrimeOffer              String               @default("") 
+  bookMyShowOffer              String               @default("")
+  ETPrimeOffer                 String               @default("")      
 
   fuelSurchargeWaiver     Float                     @default(0)
   fuelSurchargeMinTxn     Float                     @default(0)
@@ -120,8 +129,14 @@ model CreditCard{
   membershipHertz                   MembershipHertz                       @default(NONE)
 
   lostCardLiability                 Int                                   @default(0)
+  airAccidentInsurance              Int                                   @default(0)
+  overseasHospitalisationInsurance  Int                                   @default(0)
+  lostBaggageInsurance              Int                                   @default(0)
+  baggageDelayInsurance             Int                                   @default(0)
 
   milestones                        String[]                              @default([])
+
+  foreignCurrencyMarkup             Float                                 @default(0)
 
   isDeleted                 Boolean                 @default(false)
   isDiscontinued            Boolean                 @default(false)
@@ -226,6 +241,8 @@ model ComparisonSlug{
 
   name              String                    @unique
   slug              String                    @unique
+  card1ImageUrl     String                    @default("")
+  card2ImageUrl     String                    @default("")
   isDeleted         Boolean                   @default(false)
 
 }

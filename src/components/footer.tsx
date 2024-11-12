@@ -55,35 +55,35 @@ function Sitemap() {
       <div>
         <SitemapHeading>Product</SitemapHeading>
         <SitemapLinks>
-          <SitemapLink href="#">Credit Cards</SitemapLink>
-          <SitemapLink href="/compare-credit-cards">
+          {/* <SitemapLink href="#">Credit Cards</SitemapLink> */}
+          <SitemapLink href="/credit-card-compare">
             Compare Credit Cards
           </SitemapLink>
-          <SitemapLink href="#">Deals & Offers</SitemapLink>
+          {/* <SitemapLink href="#">Deals & Offers</SitemapLink> */}
         </SitemapLinks>
       </div>
-      <div>
+      {/* <div>
         <SitemapHeading>Company</SitemapHeading>
         <SitemapLinks>
           <SitemapLink href="#">Careers</SitemapLink>
           <SitemapLink href="#">Blog</SitemapLink>
           <SitemapLink href="#">Company</SitemapLink>
         </SitemapLinks>
-      </div>
-      <div>
+      </div> */}
+      {/* <div>
         <SitemapHeading>Support</SitemapHeading>
         <SitemapLinks>
           <SitemapLink href="#">Help center</SitemapLink>
           <SitemapLink href="#">Community</SitemapLink>
         </SitemapLinks>
-      </div>
-      <div>
+      </div> */}
+      {/* <div>
         <SitemapHeading>Company</SitemapHeading>
         <SitemapLinks>
           <SitemapLink href="#">Terms of service</SitemapLink>
           <SitemapLink href="#">Privacy policy</SitemapLink>
         </SitemapLinks>
-      </div>
+      </div> */}
     </>
   )
 }
@@ -150,7 +150,7 @@ function SocialLinks() {
 function Copyright() {
   return (
     <div className="text-sm/6 text-gray-950">
-      &copy; {new Date().getFullYear()} Radiant Inc.
+      &copy; {new Date().getFullYear()} CreditSwami Inc.
     </div>
   )
 }

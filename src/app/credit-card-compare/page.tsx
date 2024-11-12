@@ -1,11 +1,10 @@
-import React, { Fragment } from 'react'
-
 import { Container } from '@/components/container'
 import { Footer } from '@/components/footer'
 import { GradientBackground } from '@/components/gradient'
 import { Navbar } from '@/components/navbar'
 import { Heading, Subheading } from '@/components/text'
 import { db } from '@/db/prismaDb'
+import Link from 'next/link'
 
 export async function generateStaticParams() {
   const creditCards = await db.creditCard.findMany({
@@ -39,14 +38,24 @@ type Args = {
   params: Promise<{
     slug?: string
   }>
+  searchParams: { [key: string]: string | string[] | undefined }
 }
 
-export default async function Post({ params: paramsPromise }: Args) {
-  const creditCards = await db.creditCard.findMany({
+export default async function Post({
+  params: paramsPromise,
+  searchParams,
+}: Args) {
+  const page = parseInt((searchParams.page as string) ?? '1')
+  const limit = 9
+
+  const comparisonSlug = await db.comparisonSlug.findMany({
     orderBy: {
       updatedAt: 'desc',
     },
+    skip: (page - 1) * limit,
+    take: limit,
   })
+  // console.log(comparisonSlug.length)
 
   return (
     <main className="overflow-hidden">
@@ -71,18 +80,96 @@ export default async function Post({ params: paramsPromise }: Args) {
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="sm:flex sm:items-center">
             <div className="sm:flex-auto">
-              {/* <h1 className="text-white-900 text-4xl font-semibold">
-                    {card1.name} vs {card2.name}
-                  </h1> */}
-              {/* <p className="mt-2 text-sm text-gray-700">
-                A list of all the users in your account including their name, title, email and role.
-              </p> */}
+              <h1 className="pb-8 text-2xl font-semibold text-gray-900">
+                {' '}
+                Credit Card Compare
+              </h1>
+
+              <ul
+                role="list"
+                className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+              >
+                {comparisonSlug.map((comparisonSlug) => (
+                  <li
+                    key={comparisonSlug.comparisonSlugId}
+                    className="col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow"
+                  >
+                    <Link
+                      prefetch
+                      href={`/credit-card-compare/${comparisonSlug.slug}`}
+                    >
+                      <div className="-mt-px flex divide-x divide-gray-200">
+                        <div className="flex w-0 flex-1">
+                          <img
+                            src={comparisonSlug.card1ImageUrl}
+                            alt={comparisonSlug.name.split(' vs ')[0]}
+                            className="aspect-ratio: 1 / 3; h-20 flex-1"
+                          />
+                        </div>
+                        <div className="-ml-px flex w-0 flex-1">
+                          <img
+                            src={comparisonSlug.card2ImageUrl}
+                            className="aspect-ratio: 1 / 3; h-20 flex-1"
+                            alt={comparisonSlug.name.split(' vs ')[1]}
+                          />
+                        </div>
+                      </div>
+                      <div className="flex w-full items-center justify-between space-x-6 p-6">
+                        <div className="flex-1">
+                          <div className="flex items-center space-x-3">
+                            <h3 className="text-sm font-medium text-gray-900">
+                              {comparisonSlug.name}
+                            </h3>
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
           <div className="mt-8 flow-root">
             <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-                {/* TODO */}
+                <nav
+                  aria-label="Pagination"
+                  className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6"
+                >
+                  <div className="hidden sm:block">
+                    <p className="text-sm text-gray-700">
+                      Showing{' '}
+                      <span className="font-medium">
+                        {comparisonSlug.length}
+                      </span>{' '}
+                      to{' '}
+                      <span className="font-medium">{(page - 1) * limit}</span>{' '}
+                      of{' '}
+                      <span className="font-medium">
+                        {page * comparisonSlug.length}
+                      </span>{' '}
+                      results
+                    </p>
+                  </div>
+                  <div className="flex flex-1 justify-between sm:justify-end">
+                    {page > 1 && (
+                      <Link
+                        href={`/credit-card-compare?page=${page - 1}`}
+                        className="relative inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
+                      >
+                        Previous
+                      </Link>
+                    )}
+                    {comparisonSlug.length >= limit && (
+                      <Link
+                        href={`/credit-card-compare?page=${page + 1}`}
+                        className="relative ml-3 inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
+                      >
+                        Next
+                      </Link>
+                    )}
+                  </div>
+                </nav>
               </div>
             </div>
           </div>
@@ -102,99 +189,3 @@ export default async function Post({ params: paramsPromise }: Args) {
     </main>
   )
 }
-
-const items = [
-  { id: 1 },
-  // More items...
-]
-const ComparisonCard = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <tbody className="border-y-8 bg-white">
-      <Fragment>{children}</Fragment>
-    </tbody>
-  )
-}
-
-const ComparisonItemRowFullWidth = ({
-  key,
-  value,
-}: {
-  key: string
-  value: String
-}) => {
-  return (
-    <tr className="border-t border-gray-200" key={key}>
-      <th
-        scope="colgroup"
-        colSpan={3}
-        className="bg-gray-50 py-2 text-left text-3xl font-semibold text-gray-900 sm:pl-3"
-      >
-        <h3>{value}</h3>
-      </th>
-    </tr>
-  )
-}
-const ComparisonItemRow = ({
-  key,
-  children,
-}: {
-  key: string
-  children: React.ReactNode
-}) => {
-  return (
-    <tr className="border-t border-gray-200" key={key}>
-      {children}
-    </tr>
-  )
-}
-const ComparisonItemHeadingCell = ({ value }: { value: String }) => {
-  return <td className="text-md font-medium text-gray-900 sm:pl-3">{value}</td>
-}
-const ComparisonItemContentBoth = ({
-  value1,
-  value2,
-  isCard1Better,
-  isCard2Better,
-}: {
-  value1: String
-  value2: String
-  isCard1Better: Boolean
-  isCard2Better: Boolean
-}) => {
-  const card1Formatting = isCard1Better ? 'bg-green-200' : ''
-  const card2Formatting = isCard2Better ? 'bg-green-200' : ''
-  return (
-    <>
-      <td
-        key=""
-        className={
-          'whitespace-normal break-words px-3 py-4 text-sm text-gray-500 sm:truncate sm:whitespace-nowrap ' +
-          card1Formatting
-        }
-        style={{ maxWidth: '150px' }}
-      >
-        {value1}
-      </td>
-      <td
-        key="23"
-        className={
-          'break-wordspy-4 whitespace-normal text-sm text-gray-500 sm:truncate sm:whitespace-nowrap ' +
-          card2Formatting
-        }
-        style={{ maxWidth: '150px' }}
-      >
-        {value2}
-      </td>
-    </>
-  )
-}
-// const ComparisonItemContentCell = ({ value }: { value: String }) => {
-//   return (
-//     <td
-//       className="whitespace-normal break-words px-3 py-4 text-sm text-gray-500 sm:whitespace-nowrap sm:truncate"
-//       style={{ maxWidth: '150px' }}
-//     >
-//       {value}
-//     </td>
-//   )
-// }

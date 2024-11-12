@@ -5,18 +5,18 @@ export default async function sitemap() {
   const baseUrl = env.NEXT_PUBLIC_BASE_URL
 
   //Get All products from DB
-  const creditcards = await db.creditCard.findMany({
-    where: {
-      isDeleted: false,
-    },
-  })
-  const creditCardUrls =
-    creditcards.map((creditCard) => {
-      return {
-        url: baseUrl + `/${creditCard.slug}/cc/${creditCard.id}`,
-        lastModified: creditCard.updatedAt,
-      }
-    }) ?? []
+  // const creditcards = await db.creditCard.findMany({
+  //   where: {
+  //     isDeleted: false,
+  //   },
+  // })
+  // const creditCardUrls =
+  //   creditcards.map((creditCard) => {
+  //     return {
+  //       url: baseUrl + `/${creditCard.slug}/cc/${creditCard.id}`,
+  //       lastModified: creditCard.updatedAt,
+  //     }
+  //   }) ?? []
 
   const comparisonSlug = await db.comparisonSlug.findMany({})
   const comparisonUrls =
@@ -32,7 +32,7 @@ export default async function sitemap() {
       url: baseUrl,
       lastModified: new Date(),
     },
-    ...creditCardUrls,
+    // ...creditCardUrls,
     ...comparisonUrls,
     // {
     //   url: `${baseUrl}/about-us`,

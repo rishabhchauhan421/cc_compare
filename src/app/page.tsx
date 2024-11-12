@@ -29,10 +29,10 @@ function Hero() {
         <Navbar
           banner={
             <Link
-              href="/blog/radiant-raises-100m-series-a-from-tailwind-ventures"
+              href="/credit-card-compare"
               className="flex items-center gap-1 rounded-full bg-fuchsia-950/35 px-3 py-0.5 text-sm/6 font-medium text-white data-[hover]:bg-fuchsia-950/30"
             >
-              Radiant raises $100M Series A from Tailwind Ventures
+              CreditSwami a place to explore credit cards
               <ChevronRightIcon className="size-4" />
             </Link>
           }
@@ -46,7 +46,7 @@ function Hero() {
             etc.
           </p>
           <div className="mt-12 flex flex-col gap-x-6 gap-y-4 sm:flex-row">
-            <Button href="#">Compare Cards</Button>
+            <Button href="/credit-card-compared">Compare Cards</Button>
             <Button variant="secondary" href="#">
               Compare Deals
             </Button>
