@@ -1,9 +1,11 @@
-import { CardMaterial, type CreditCard } from '@prisma/client'
+import { CardMaterial, Concierge, type CreditCard } from '@prisma/client'
+import { ConciergeUtils } from './conciergeUtils'
 import { HotelUtils } from './hotelUtils'
 
 export enum CreditCardAttributes {
   isInviteOnly,
   cardMaterial,
+  concierge,
   minAgeSalaried,
   minAgeSelfEmployed,
   minNetIncomeSalaried,
@@ -26,6 +28,11 @@ export enum CreditCardAttributes {
   fuelPointsPer100Spent,
   groceryPointsPer100Spent,
   utilityPointsPer100Spent,
+  insurancePointsPer100Spent,
+  governmentTaxPointsPer100Spent,
+  rentPointsPer100Spent,
+  emiPointsPer100Spent,
+  pointsConversion,
 
   domesticLounge,
   internationalLounge,
@@ -48,6 +55,7 @@ export enum CreditCardAttributes {
   membershipIPrefer,
 
   introductoryOffers,
+  membership,
 }
 
 type ComparisonResult = {
@@ -90,6 +98,24 @@ export class CardComparison {
           return { show: true, isCard1Better: false, isCard2Better: true }
         } else {
           return { show: false, isCard1Better: false, isCard2Better: false }
+        }
+
+      case CreditCardAttributes.concierge:
+        const card1Data = ConciergeUtils.getConciergeData(card1.concierge)
+        const card2Data = ConciergeUtils.getConciergeData(card2.concierge)
+        if (
+          card1.concierge === Concierge.NONE &&
+          card2.concierge === Concierge.NONE
+        )
+          return { show: false, isCard1Better: false, isCard2Better: false }
+        else if (card1Data.level === card2Data.level) {
+          return { show: true, isCard1Better: false, isCard2Better: false }
+        } else {
+          return {
+            show: true,
+            isCard1Better: card1Data.level > card2Data.level,
+            isCard2Better: card2Data.level > card1Data.level,
+          }
         }
 
       case CreditCardAttributes.minAgeSalaried:
@@ -188,7 +214,7 @@ export class CardComparison {
           return { show: false, isCard1Better: false, isCard2Better: false }
         if (card1.signupBonusValue === card2.signupBonusValue)
           return { show: true, isCard1Better: false, isCard2Better: false }
-        if (card1.signupBonus > card2.signupBonus)
+        if (card1.signupBonusValue > card2.signupBonusValue)
           return { show: true, isCard1Better: true, isCard2Better: false }
         else return { show: true, isCard1Better: false, isCard2Better: true }
 
@@ -298,6 +324,22 @@ export class CardComparison {
           return { show: true, isCard1Better: true, isCard2Better: false }
         else return { show: true, isCard1Better: false, isCard2Better: true }
 
+      case CreditCardAttributes.pointValue:
+        if (card1.pointsValue === 0 && card2.pointsValue === 0)
+          return { show: false, isCard1Better: false, isCard2Better: false }
+        if (card1.pointsValue === card2.pointsValue)
+          return { show: true, isCard1Better: false, isCard2Better: false }
+        if (card1.pointsValue > card2.pointsValue)
+          return { show: true, isCard1Better: true, isCard2Better: false }
+        else return { show: true, isCard1Better: false, isCard2Better: true }
+
+      case CreditCardAttributes.pointsConversion:
+        if (
+          card1.pointsConversion.length < 1 &&
+          card2.pointsConversion.length < 1
+        )
+          return { show: false, isCard1Better: false, isCard2Better: false }
+        else return { show: true, isCard1Better: false, isCard2Better: false }
       case CreditCardAttributes.membershipTaj:
         var card1Level = HotelUtils.getTajMembershipData(
           card1.membershipTaj,
@@ -442,6 +484,13 @@ export class CardComparison {
           card1.introductoryOffers === '' &&
           card2.introductoryOffers === ''
         ) {
+          return { show: false, isCard1Better: false, isCard2Better: false }
+        } else {
+          return { show: true, isCard1Better: false, isCard2Better: false }
+        }
+
+      case CreditCardAttributes.membership:
+        if (card1.membership.length < 1 && card2.membership.length < 1) {
           return { show: false, isCard1Better: false, isCard2Better: false }
         } else {
           return { show: true, isCard1Better: false, isCard2Better: false }

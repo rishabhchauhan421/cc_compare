@@ -8,6 +8,7 @@ import { Heading, Subheading } from '@/components/text'
 import { db } from '@/db/prismaDb'
 import { env } from '@/env'
 import { CardComparison, CreditCardAttributes } from '@/utils/cardComparison'
+import { ConciergeUtils } from '@/utils/conciergeUtils'
 import { HotelUtils } from '@/utils/hotelUtils'
 import { NetworkUtils } from '@/utils/networkUtils'
 import { toTitleCase } from '@/utils/toTitleCase'
@@ -95,6 +96,11 @@ export default async function Post({ params: paramsPromise }: Args) {
     card2,
     attr: CreditCardAttributes.isInviteOnly,
   })
+  const conciergeResult = CardComparison.compareCards({
+    card1,
+    card2,
+    attr: CreditCardAttributes.concierge,
+  })
   const minAgeSalariedResult = CardComparison.compareCards({
     card1,
     card2,
@@ -154,7 +160,6 @@ export default async function Post({ params: paramsPromise }: Args) {
     card2,
     attr: CreditCardAttributes.signupBonusTerms,
   })
-
   // const pointValueResult = CardComparison.compareCards({
   //   card1,
   //   card2,
@@ -203,6 +208,32 @@ export default async function Post({ params: paramsPromise }: Args) {
     attr: CreditCardAttributes.utilityPointsPer100Spent,
   })
 
+  const insurancePointsPer100SpentResult = CardComparison.compareCards({
+    card1,
+    card2,
+    attr: CreditCardAttributes.insurancePointsPer100Spent,
+  })
+  const governmentTaxPointsPer100SpentResult = CardComparison.compareCards({
+    card1,
+    card2,
+    attr: CreditCardAttributes.governmentTaxPointsPer100Spent,
+  })
+  const rentPointsPer100SpentResult = CardComparison.compareCards({
+    card1,
+    card2,
+    attr: CreditCardAttributes.rentPointsPer100Spent,
+  })
+  const emiPointsPer100SpentResult = CardComparison.compareCards({
+    card1,
+    card2,
+    attr: CreditCardAttributes.emiPointsPer100Spent,
+  })
+  const pointsConversionResult = CardComparison.compareCards({
+    card1,
+    card2,
+    attr: CreditCardAttributes.pointsConversion,
+  })
+
   const membershipTajResult = CardComparison.compareCards({
     card1,
     card2,
@@ -244,6 +275,11 @@ export default async function Post({ params: paramsPromise }: Args) {
     card1,
     card2,
     attr: CreditCardAttributes.introductoryOffers,
+  })
+  const membershipResult = CardComparison.compareCards({
+    card1,
+    card2,
+    attr: CreditCardAttributes.membership,
   })
 
   return (
@@ -355,6 +391,23 @@ export default async function Post({ params: paramsPromise }: Args) {
                         />
                       </ComparisonItemRow>
                     )}
+                    {conciergeResult.show && (
+                      <ComparisonItemRow key={'basic-4'}>
+                        <ComparisonItemHeadingCell value={'Concierge'} />
+                        <ComparisonItemContentBoth
+                          value1={
+                            ConciergeUtils.getConciergeData(card1.concierge)
+                              .name
+                          }
+                          value2={
+                            ConciergeUtils.getConciergeData(card2.concierge)
+                              .name
+                          }
+                          isCard1Better={conciergeResult.isCard1Better}
+                          isCard2Better={conciergeResult.isCard2Better}
+                        />
+                      </ComparisonItemRow>
+                    )}
                   </ComparisonCard>
 
                   <ComparisonCard>
@@ -425,8 +478,16 @@ export default async function Post({ params: paramsPromise }: Args) {
                         value={'Maximum Age Self Employed'}
                       />
                       <ComparisonItemContentBoth
-                        value1={card1.maxAgeSelfEmployed.toString()}
-                        value2={card2.maxAgeSelfEmployed.toString()}
+                        value1={
+                          card1.maxAgeSelfEmployed === 100
+                            ? 'Not Specified'
+                            : card1.maxAgeSelfEmployed.toString()
+                        }
+                        value2={
+                          card2.maxAgeSelfEmployed === 100
+                            ? 'Not Specified'
+                            : card2.maxAgeSelfEmployed.toString()
+                        }
                         isCard1Better={maxAgeSelfEmployedResult.isCard1Better}
                         isCard2Better={maxAgeSelfEmployedResult.isCard2Better}
                       />
@@ -563,6 +624,91 @@ export default async function Post({ params: paramsPromise }: Args) {
                         }
                       />
                     </ComparisonItemRow>
+                    {insurancePointsPer100SpentResult.show && (
+                      <ComparisonItemRow key={'points-category-insurance'}>
+                        <ComparisonItemHeadingCell
+                          value={'Insurance Points Per ₹100'}
+                        />
+                        <ComparisonItemContentBoth
+                          value1={card1.insurancePointsPer100.toString()}
+                          value2={card2.insurancePointsPer100.toString()}
+                          isCard1Better={
+                            card1.insurancePointsPer100 >
+                            card2.insurancePointsPer100
+                          }
+                          isCard2Better={
+                            card2.insurancePointsPer100 >
+                            card1.insurancePointsPer100
+                          }
+                        />
+                      </ComparisonItemRow>
+                    )}
+                    {governmentTaxPointsPer100SpentResult.show && (
+                      <ComparisonItemRow key={'points-category-government'}>
+                        <ComparisonItemHeadingCell
+                          value={'Government Points Per ₹100'}
+                        />
+                        <ComparisonItemContentBoth
+                          value1={card1.governmentPointsPer100.toString()}
+                          value2={card2.governmentPointsPer100.toString()}
+                          isCard1Better={
+                            card1.governmentPointsPer100 >
+                            card2.governmentPointsPer100
+                          }
+                          isCard2Better={
+                            card2.governmentPointsPer100 >
+                            card1.governmentPointsPer100
+                          }
+                        />
+                      </ComparisonItemRow>
+                    )}
+                    {rentPointsPer100SpentResult.show && (
+                      <ComparisonItemRow key={'points-category-rent'}>
+                        <ComparisonItemHeadingCell
+                          value={'Rent Points Per ₹100'}
+                        />
+                        <ComparisonItemContentBoth
+                          value1={card1.rentPointsPer100.toString()}
+                          value2={card2.rentPointsPer100.toString()}
+                          isCard1Better={
+                            card1.rentPointsPer100 > card2.rentPointsPer100
+                          }
+                          isCard2Better={
+                            card2.rentPointsPer100 > card1.rentPointsPer100
+                          }
+                        />
+                      </ComparisonItemRow>
+                    )}
+                    {emiPointsPer100SpentResult.show && (
+                      <ComparisonItemRow key={'points-category-emi'}>
+                        <ComparisonItemHeadingCell
+                          value={'EMI Points Per ₹100'}
+                        />
+                        <ComparisonItemContentBoth
+                          value1={card1.emiPointsPer100.toString()}
+                          value2={card2.emiPointsPer100.toString()}
+                          isCard1Better={
+                            card1.emiPointsPer100 > card2.emiPointsPer100
+                          }
+                          isCard2Better={
+                            card2.emiPointsPer100 > card1.emiPointsPer100
+                          }
+                        />
+                      </ComparisonItemRow>
+                    )}
+                    {pointsConversionResult.show && (
+                      <ComparisonItemRow key={'points-category-insurance'}>
+                        <ComparisonItemHeadingCell value={'Points Terms'} />
+                        <ComparisonItemContentBoth
+                          value1={card1.pointsConversion[0]}
+                          value2={card2.pointsConversion[0]}
+                          value1Array={card1.pointsConversion}
+                          value2Array={card2.pointsConversion}
+                          isCard1Better={pointsConversionResult.isCard1Better}
+                          isCard2Better={pointsConversionResult.isCard2Better}
+                        />
+                      </ComparisonItemRow>
+                    )}
                   </ComparisonCard>
 
                   <ComparisonCard>
@@ -849,166 +995,179 @@ export default async function Post({ params: paramsPromise }: Args) {
                     )}
                   </ComparisonCard>
 
-                  <ComparisonCard>
-                    <ComparisonItemRowFullWidth
-                      key={'hotels-memberships'}
-                      value={'Hotels & Memberships'}
-                    />
-                    {membershipTajResult.show && (
-                      <ComparisonItemRow key={'hotels-1'}>
-                        <ComparisonItemHeadingCell value={'Taj Epicure'} />
-                        <ComparisonItemContentBoth
-                          value1={
-                            HotelUtils.getTajMembershipData(card1.membershipTaj)
-                              .name
-                          }
-                          value2={
-                            HotelUtils.getTajMembershipData(card2.membershipTaj)
-                              .name
-                          }
-                          isCard1Better={membershipTajResult.isCard1Better}
-                          isCard2Better={membershipTajResult.isCard2Better}
-                        />
-                      </ComparisonItemRow>
-                    )}
-                    {membershipBonvoyResult.show && (
-                      <ComparisonItemRow key={'hotels-2'}>
-                        <ComparisonItemHeadingCell value={'Mariott Bonvoy'} />
-                        <ComparisonItemContentBoth
-                          value1={
-                            HotelUtils.getBonvoyMembershipData(
-                              card1.membershipBonvoy,
-                            ).name
-                          }
-                          value2={
-                            HotelUtils.getBonvoyMembershipData(
-                              card2.membershipBonvoy,
-                            ).name
-                          }
-                          isCard1Better={membershipBonvoyResult.isCard1Better}
-                          isCard2Better={membershipBonvoyResult.isCard2Better}
-                        />
-                      </ComparisonItemRow>
-                    )}
-                    {membershipHiltonHonorsResult.show && (
-                      <ComparisonItemRow key={'hotels-3'}>
-                        <ComparisonItemHeadingCell value={'Hilton Honors'} />
-                        <ComparisonItemContentBoth
-                          value1={
-                            HotelUtils.getHiltonHonorsMembershipData(
-                              card1.membershipHiltonHonors,
-                            ).name
-                          }
-                          value2={
-                            HotelUtils.getHiltonHonorsMembershipData(
-                              card2.membershipHiltonHonors,
-                            ).name
-                          }
-                          isCard1Better={
-                            membershipHiltonHonorsResult.isCard1Better
-                          }
-                          isCard2Better={
-                            membershipHiltonHonorsResult.isCard2Better
-                          }
-                        />
-                      </ComparisonItemRow>
-                    )}
-                    {membershipHotelRadissonResult.show && (
-                      <ComparisonItemRow key={'hotels-4'}>
-                        <ComparisonItemHeadingCell
-                          value={'Radisson Membership'}
-                        />
-                        <ComparisonItemContentBoth
-                          value1={
-                            HotelUtils.getRadissonMembershipData(
-                              card1.membershipHotelRadisson,
-                            ).name
-                          }
-                          value2={
-                            HotelUtils.getRadissonMembershipData(
-                              card2.membershipHotelRadisson,
-                            ).name
-                          }
-                          isCard1Better={
-                            membershipHotelRadissonResult.isCard1Better
-                          }
-                          isCard2Better={
-                            membershipHotelRadissonResult.isCard2Better
-                          }
-                        />
-                      </ComparisonItemRow>
-                    )}
-                    {membershipAccorPlusResult.show && (
-                      <ComparisonItemRow key={'hotels-5'}>
-                        <ComparisonItemHeadingCell value={'Accor Plus'} />
-                        <ComparisonItemContentBoth
-                          value1={
-                            HotelUtils.getAccorPlusMembershipData(
-                              card1.membershipAccorPlus,
-                            ).name
-                          }
-                          value2={
-                            HotelUtils.getAccorPlusMembershipData(
-                              card2.membershipAccorPlus,
-                            ).name
-                          }
-                          isCard1Better={
-                            membershipAccorPlusResult.isCard1Better
-                          }
-                          isCard2Better={
-                            membershipAccorPlusResult.isCard2Better
-                          }
-                        />
-                      </ComparisonItemRow>
-                    )}
-                    {membershipIPreferResult.show && (
-                      <ComparisonItemRow key={'hotels-6'}>
-                        <ComparisonItemHeadingCell
-                          value={'IPrefer Hotel Rewards'}
-                        />
-                        <ComparisonItemContentBoth
-                          value1={
-                            HotelUtils.getIPreferMembershipData(
-                              card1.membershipIPrefer,
-                            ).name
-                          }
-                          value2={
-                            HotelUtils.getIPreferMembershipData(
-                              card2.membershipIPrefer,
-                            ).name
-                          }
-                          isCard1Better={membershipIPreferResult.isCard1Better}
-                          isCard2Better={membershipIPreferResult.isCard2Better}
-                        />
-                      </ComparisonItemRow>
-                    )}
-                    {membershipPostcardSunshineClubResult.show && (
-                      <ComparisonItemRow key={'hotels-7'}>
-                        <ComparisonItemHeadingCell
-                          value={'Sunchine Club Membership'}
-                        />
-                        <ComparisonItemContentBoth
-                          value1={
-                            HotelUtils.getSunshineClubMembershipData(
-                              card1.membershipPostcardSunshineClub,
-                            ).name
-                          }
-                          value2={
-                            HotelUtils.getSunshineClubMembershipData(
-                              card2.membershipPostcardSunshineClub,
-                            ).name
-                          }
-                          isCard1Better={
-                            membershipPostcardSunshineClubResult.isCard1Better
-                          }
-                          isCard2Better={
-                            membershipPostcardSunshineClubResult.isCard2Better
-                          }
-                        />
-                      </ComparisonItemRow>
-                    )}
-                  </ComparisonCard>
-
+                  {(membershipTajResult.show ||
+                    membershipBonvoyResult.show ||
+                    membershipHiltonHonorsResult.show ||
+                    membershipHotelRadissonResult.show ||
+                    membershipAccorPlusResult.show ||
+                    membershipIPreferResult.show ||
+                    membershipPostcardSunshineClubResult.show) && (
+                    <ComparisonCard>
+                      <ComparisonItemRowFullWidth
+                        key={'hotels-memberships'}
+                        value={'Hotels & Memberships'}
+                      />
+                      {membershipTajResult.show && (
+                        <ComparisonItemRow key={'hotels-1'}>
+                          <ComparisonItemHeadingCell value={'Taj Epicure'} />
+                          <ComparisonItemContentBoth
+                            value1={
+                              HotelUtils.getTajMembershipData(
+                                card1.membershipTaj,
+                              ).name
+                            }
+                            value2={
+                              HotelUtils.getTajMembershipData(
+                                card2.membershipTaj,
+                              ).name
+                            }
+                            isCard1Better={membershipTajResult.isCard1Better}
+                            isCard2Better={membershipTajResult.isCard2Better}
+                          />
+                        </ComparisonItemRow>
+                      )}
+                      {membershipBonvoyResult.show && (
+                        <ComparisonItemRow key={'hotels-2'}>
+                          <ComparisonItemHeadingCell value={'Mariott Bonvoy'} />
+                          <ComparisonItemContentBoth
+                            value1={
+                              HotelUtils.getBonvoyMembershipData(
+                                card1.membershipBonvoy,
+                              ).name
+                            }
+                            value2={
+                              HotelUtils.getBonvoyMembershipData(
+                                card2.membershipBonvoy,
+                              ).name
+                            }
+                            isCard1Better={membershipBonvoyResult.isCard1Better}
+                            isCard2Better={membershipBonvoyResult.isCard2Better}
+                          />
+                        </ComparisonItemRow>
+                      )}
+                      {membershipHiltonHonorsResult.show && (
+                        <ComparisonItemRow key={'hotels-3'}>
+                          <ComparisonItemHeadingCell value={'Hilton Honors'} />
+                          <ComparisonItemContentBoth
+                            value1={
+                              HotelUtils.getHiltonHonorsMembershipData(
+                                card1.membershipHiltonHonors,
+                              ).name
+                            }
+                            value2={
+                              HotelUtils.getHiltonHonorsMembershipData(
+                                card2.membershipHiltonHonors,
+                              ).name
+                            }
+                            isCard1Better={
+                              membershipHiltonHonorsResult.isCard1Better
+                            }
+                            isCard2Better={
+                              membershipHiltonHonorsResult.isCard2Better
+                            }
+                          />
+                        </ComparisonItemRow>
+                      )}
+                      {membershipHotelRadissonResult.show && (
+                        <ComparisonItemRow key={'hotels-4'}>
+                          <ComparisonItemHeadingCell
+                            value={'Radisson Membership'}
+                          />
+                          <ComparisonItemContentBoth
+                            value1={
+                              HotelUtils.getRadissonMembershipData(
+                                card1.membershipHotelRadisson,
+                              ).name
+                            }
+                            value2={
+                              HotelUtils.getRadissonMembershipData(
+                                card2.membershipHotelRadisson,
+                              ).name
+                            }
+                            isCard1Better={
+                              membershipHotelRadissonResult.isCard1Better
+                            }
+                            isCard2Better={
+                              membershipHotelRadissonResult.isCard2Better
+                            }
+                          />
+                        </ComparisonItemRow>
+                      )}
+                      {membershipAccorPlusResult.show && (
+                        <ComparisonItemRow key={'hotels-5'}>
+                          <ComparisonItemHeadingCell value={'Accor Plus'} />
+                          <ComparisonItemContentBoth
+                            value1={
+                              HotelUtils.getAccorPlusMembershipData(
+                                card1.membershipAccorPlus,
+                              ).name
+                            }
+                            value2={
+                              HotelUtils.getAccorPlusMembershipData(
+                                card2.membershipAccorPlus,
+                              ).name
+                            }
+                            isCard1Better={
+                              membershipAccorPlusResult.isCard1Better
+                            }
+                            isCard2Better={
+                              membershipAccorPlusResult.isCard2Better
+                            }
+                          />
+                        </ComparisonItemRow>
+                      )}
+                      {membershipIPreferResult.show && (
+                        <ComparisonItemRow key={'hotels-6'}>
+                          <ComparisonItemHeadingCell
+                            value={'IPrefer Hotel Rewards'}
+                          />
+                          <ComparisonItemContentBoth
+                            value1={
+                              HotelUtils.getIPreferMembershipData(
+                                card1.membershipIPrefer,
+                              ).name
+                            }
+                            value2={
+                              HotelUtils.getIPreferMembershipData(
+                                card2.membershipIPrefer,
+                              ).name
+                            }
+                            isCard1Better={
+                              membershipIPreferResult.isCard1Better
+                            }
+                            isCard2Better={
+                              membershipIPreferResult.isCard2Better
+                            }
+                          />
+                        </ComparisonItemRow>
+                      )}
+                      {membershipPostcardSunshineClubResult.show && (
+                        <ComparisonItemRow key={'hotels-7'}>
+                          <ComparisonItemHeadingCell
+                            value={'Sunchine Club Membership'}
+                          />
+                          <ComparisonItemContentBoth
+                            value1={
+                              HotelUtils.getSunshineClubMembershipData(
+                                card1.membershipPostcardSunshineClub,
+                              ).name
+                            }
+                            value2={
+                              HotelUtils.getSunshineClubMembershipData(
+                                card2.membershipPostcardSunshineClub,
+                              ).name
+                            }
+                            isCard1Better={
+                              membershipPostcardSunshineClubResult.isCard1Better
+                            }
+                            isCard2Better={
+                              membershipPostcardSunshineClubResult.isCard2Better
+                            }
+                          />
+                        </ComparisonItemRow>
+                      )}
+                    </ComparisonCard>
+                  )}
                   <ComparisonCard>
                     <ComparisonItemRowFullWidth
                       key={'Intro-Offers'}
@@ -1022,21 +1181,23 @@ export default async function Post({ params: paramsPromise }: Args) {
                         value2={card2.perks[0]}
                         value1Array={card1.perks}
                         value2Array={card2.perks}
-                        isCard1Better={introductoryOffersResult.isCard1Better}
-                        isCard2Better={introductoryOffersResult.isCard2Better}
+                        isCard1Better={false}
+                        isCard2Better={false}
                       />
                     </ComparisonItemRow>
 
-                    {introductoryOffersResult.show && (
+                    {membershipResult.show && (
                       <ComparisonItemRow key={'intro-offers-2'}>
                         <ComparisonItemHeadingCell
                           value={'Introductory Offers'}
                         />
                         <ComparisonItemContentBoth
-                          value1={card1.introductoryOffers}
-                          value2={card2.introductoryOffers}
-                          isCard1Better={introductoryOffersResult.isCard1Better}
-                          isCard2Better={introductoryOffersResult.isCard2Better}
+                          value1={card1.membership[0]}
+                          value2={card2.membership[0]}
+                          value1Array={card1.membership}
+                          value2Array={card2.membership}
+                          isCard1Better={membershipResult.isCard1Better}
+                          isCard2Better={membershipResult.isCard2Better}
                         />
                       </ComparisonItemRow>
                     )}
