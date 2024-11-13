@@ -9,6 +9,7 @@ import { db } from '@/db/prismaDb'
 import { env } from '@/env'
 import { CardComparison, CreditCardAttributes } from '@/utils/cardComparison'
 import { HotelUtils } from '@/utils/hotelUtils'
+import { NetworkUtils } from '@/utils/networkUtils'
 import { toTitleCase } from '@/utils/toTitleCase'
 import dayjs from 'dayjs'
 import type { Metadata } from 'next'
@@ -65,9 +66,6 @@ export default async function Post({ params: paramsPromise }: Args) {
       slug: {
         in: creditCardSlugs,
       },
-    },
-    include: {
-      networkBrand: true,
     },
   })
 
@@ -265,7 +263,7 @@ export default async function Post({ params: paramsPromise }: Args) {
         {/* <ComparisonCard heading={'Travel'}>
           <ComparisonItem heading="Annual Fee" item1="₹5000" item2="₹10000" isItem1Better={true} />
         </ComparisonCard> */}
-        <div className="px-4 sm:px-6 lg:px-8">
+        <div className="sm:2">
           <div className="sm:flex sm:items-center">
             <div className="sm:flex-auto">
               {/* <h1 className="text-white-900 text-4xl font-semibold">
@@ -313,8 +311,24 @@ export default async function Post({ params: paramsPromise }: Args) {
                     <ComparisonItemRow>
                       <ComparisonItemHeadingCell value={'Network'} />
                       <ComparisonItemContentBoth
-                        value1={card1.networkBrand.name}
-                        value2={card2.networkBrand.name}
+                        value1={
+                          NetworkUtils.getNetworkDetails(card1.networkBrands[0])
+                            .name
+                        }
+                        value2={
+                          NetworkUtils.getNetworkDetails(card2.networkBrands[0])
+                            .name
+                        }
+                        value1Array={Array.from(
+                          card1.networkBrands.map((brand) => {
+                            return NetworkUtils.getNetworkDetails(brand).name
+                          }),
+                        )}
+                        value2Array={Array.from(
+                          card2.networkBrands.map((brand) => {
+                            return NetworkUtils.getNetworkDetails(brand).name
+                          }),
+                        )}
                         isCard1Better={false}
                         isCard2Better={false}
                       />
@@ -635,8 +649,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                           value={'Signup Bonus Terms'}
                         />
                         <ComparisonItemContentBoth
-                          value1={''}
-                          value2={''}
+                          value1={card1.signupBonusTerms[0]}
+                          value2={card2.signupBonusTerms[0]}
                           value1Array={card1.signupBonusTerms}
                           value2Array={card2.signupBonusTerms}
                           isCard1Better={signupBonusTermsResult.isCard1Better}
@@ -820,8 +834,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                       <ComparisonItemRow key={'lounge-terms'}>
                         <ComparisonItemHeadingCell value={'Lounge Terms'} />
                         <ComparisonItemContentBoth
-                          value1={''}
-                          value2={''}
+                          value1={card1.loungeAccessTerms[0]}
+                          value2={card2.loungeAccessTerms[0]}
                           value1Array={card1.loungeAccessTerms}
                           value2Array={card2.loungeAccessTerms}
                           isCard1Better={
@@ -1004,8 +1018,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                     <ComparisonItemRow key={'intro-offers-1'}>
                       <ComparisonItemHeadingCell value={'Perks'} />
                       <ComparisonItemContentBoth
-                        value1={''}
-                        value2={''}
+                        value1={card1.perks[0]}
+                        value2={card2.perks[0]}
                         value1Array={card1.perks}
                         value2Array={card2.perks}
                         isCard1Better={introductoryOffersResult.isCard1Better}
@@ -1136,9 +1150,6 @@ export async function generateMetadata({
         in: creditCardSlugs,
       },
     },
-    include: {
-      networkBrand: true,
-    },
   })
 
   if (creditCards.length !== 2) {
@@ -1266,7 +1277,7 @@ const ComparisonItemContentBoth = ({
         className={'px-3 py-4 text-sm text-gray-500 ' + card1Formatting}
         style={{ maxWidth: '120px' }}
       >
-        {value1Array && value1Array.length > 0 ? (
+        {value1Array && value1Array.length > 1 ? (
           <ul className="list-disc">
             {value1Array.map((item, index) => (
               <li key={index}>{item}</li>
@@ -1281,7 +1292,7 @@ const ComparisonItemContentBoth = ({
         className={'px-3 py-4 text-sm text-gray-500 ' + card2Formatting}
         style={{ maxWidth: '120px' }}
       >
-        {value2Array && value2Array.length > 0 ? (
+        {value2Array && value2Array.length > 1 ? (
           <ul className="list-disc">
             {value2Array.map((item, index) => (
               <li key={index}>{item}</li>

@@ -30,8 +30,9 @@ model CreditCard{
 
   tags                      String[]
 
-  networkBrandId            String                  @db.ObjectId
-  networkBrand              NetworkBrand            @relation(fields: [networkBrandId], references: [networkBrandId])
+  networkBrands             NetworkBrand[]          @default([])
+  // 673455331d84dda22ae68247
+  // networkBrands              NetworkBrand[]          @relation(fields: [networkBrandIds], references: [networkBrandId])
   issuerBrandId             String?                 @db.ObjectId
   IssuerBrand               IssuerBrand?            @relation(fields: [issuerBrandId], references: [issuerBrandId])
 
@@ -206,15 +207,15 @@ enum MembershipHertz{
   PRESIDENTS_CIRCLE
 }
 
-model NetworkBrand{
-  networkBrandId    String                    @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt         DateTime                  @default(now())
-  updatedAt         DateTime                  @updatedAt
-
-  name              String                    @unique
-  slug              String                    @unique
-
-  creditCards       CreditCard[]
+enum NetworkBrand{
+  AMEX
+  VISA
+  RUPAY
+  DINERSCLUBINTERNATIONAL
+  MASTERCARD
+  DISCOVER
+  JCB
+  UNIONPAY
 }
 
 model IssuerBrand{
