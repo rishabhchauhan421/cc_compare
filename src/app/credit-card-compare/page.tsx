@@ -4,35 +4,36 @@ import { GradientBackground } from '@/components/gradient'
 import { Navbar } from '@/components/navbar'
 import { Heading, Subheading } from '@/components/text'
 import { db } from '@/db/prismaDb'
+import { env } from '@/env'
 import Link from 'next/link'
 
-export async function generateStaticParams() {
-  const creditCards = await db.creditCard.findMany({
-    select: {
-      slug: true,
-    },
-  })
+// export async function generateStaticParams() {
+//   const creditCards = await db.creditCard.findMany({
+//     select: {
+//       slug: true,
+//     },
+//   })
 
-  //take two credit cards and add -vs- between their slugs and create combinations
-  const slugs = creditCards.map((creditCard: any) => creditCard.slug)
-  const params = slugs.flatMap((slug1: string, index: any) => {
-    return slugs.slice(index + 1).map((slug2: string) => {
-      return {
-        slug: slug1 + '-vs-' + slug2,
-      }
-    })
-  })
-  // const params = [
-  //   {
-  //     slug: 'amex-rewards-credit-card-vs-hdfc-regalia-credit-card',
-  //   },
-  //   {
-  //     slug: 'amex-platinum-card-vs-hdfc-infinia',
-  //   },
-  // ]
+//   //take two credit cards and add -vs- between their slugs and create combinations
+//   const slugs = creditCards.map((creditCard: any) => creditCard.slug)
+//   const params = slugs.flatMap((slug1: string, index: any) => {
+//     return slugs.slice(index + 1).map((slug2: string) => {
+//       return {
+//         slug: slug1 + '-vs-' + slug2,
+//       }
+//     })
+//   })
+//   // const params = [
+//   //   {
+//   //     slug: 'amex-rewards-credit-card-vs-hdfc-regalia-credit-card',
+//   //   },
+//   //   {
+//   //     slug: 'amex-platinum-card-vs-hdfc-infinia',
+//   //   },
+//   // ]
 
-  return params
-}
+//   return params
+// }
 
 type Args = {
   params: Promise<{
@@ -41,10 +42,7 @@ type Args = {
   searchParams: { [key: string]: string | string[] | undefined }
 }
 
-export default async function Post({
-  params: paramsPromise,
-  searchParams,
-}: Args) {
+async function getComparisonSlug({ params, searchParams }: Args) {
   const page = parseInt((searchParams.page as string) ?? '1')
   const limit = 9
 
@@ -55,7 +53,20 @@ export default async function Post({
     skip: (page - 1) * limit,
     take: limit,
   })
-  // console.log(comparisonSlug.length)
+
+  return comparisonSlug
+}
+
+export default async function Post({
+  params: paramsPromise,
+  searchParams,
+}: Args) {
+  const page = parseInt((searchParams.page as string) ?? '1')
+  const limit = 9
+  const comparisonSlug = await getComparisonSlug({
+    params: paramsPromise,
+    searchParams,
+  })
 
   return (
     <main className="overflow-hidden">
@@ -65,8 +76,8 @@ export default async function Post({
         <Subheading className="mt-16">
           {/* {dayjs(card1.createdAt).format('dddd, MMMM D, YYYY')} */}
         </Subheading>
-        <Heading as="h1" className="mt-2">
-          {/* {card1.name} vs {card2.name} */}
+        <Heading as="h1" className="mb-10 mt-2">
+          Credit Card Compare
         </Heading>
 
         {/* <article className="pb-16 pt-16"> */}
@@ -80,10 +91,10 @@ export default async function Post({
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="sm:flex sm:items-center">
             <div className="sm:flex-auto">
-              <h1 className="pb-8 text-2xl font-semibold text-gray-900">
+              {/* <h1 className="pb-8 text-2xl font-semibold text-gray-900">
                 {' '}
                 Credit Card Compare
-              </h1>
+              </h1> */}
 
               <ul
                 role="list"
@@ -188,4 +199,38 @@ export default async function Post({
       <Footer />
     </main>
   )
+}
+
+export async function generateMetadata({
+  params: paramsPromise,
+  searchParams,
+}: Args) {
+  const comparisonSlug = await getComparisonSlug({
+    params: paramsPromise,
+    searchParams,
+  })
+
+  return {
+    title: `Credit Card vs Credit Card: Which is better`,
+    description: `Discover how credit cards stack up against each other in terms of cashback, annual fees, and exclusive perks.`,
+    authors: {
+      name: `Rishabh Chauhan`,
+      // url: `${env.NEXT_PUBLIC_BASE_URL}/artist/${product.user.username}`,
+    },
+    keywords: [
+      `compare credit cards`,
+      `credit card comparison`,
+      `credit card vs credit card`,
+      `credit card comparison india`,
+      `credit card comparison tool`,
+    ],
+    publisher: process.env.siteName,
+    openGraph: {
+      type: 'website',
+      title: `Credit Card vs Credit Card: Which is better`,
+      description: `Discover how credit cards stack up against each other in terms of cashback, annual fees, and exclusive perks.`,
+      countryName: process.env.seoBaseCountry,
+      siteName: env.NEXT_PUBLIC_siteName,
+    },
+  }
 }

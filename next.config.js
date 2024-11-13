@@ -9,7 +9,7 @@ const nextConfig = {
       process.env.NODE_ENV === 'production' ? { exclude: ['error'] } : false,
   },
   env: {
-    siteName: 'The Custom Crow',
+    siteName: 'Card Swami',
     seoBaseCountry: 'India',
     supportEmail: 'help@thecustomcrow.com',
   },

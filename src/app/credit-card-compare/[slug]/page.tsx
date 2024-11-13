@@ -1332,8 +1332,8 @@ export async function generateMetadata({
   })
 
   return {
-    title: `${creditCards[0].name} vs ${creditCards[1].name}: Which is better| CS`,
-    description: `Discover how ${card1.name} and ${card2.name} stack up against each other in terms of cashback, annual fees, and exclusive perks. Make an informed choice for your wallet with our detailed comparison.`,
+    title: `${creditCards[0].name} vs ${creditCards[1].name}: Which is better`,
+    description: `Discover how ${card1.name} and ${card2.name} stack up against each other in terms of cashback, annual fees, and exclusive perks.`,
     authors: {
       name: `Rishabh Chauhan`,
       // url: `${env.NEXT_PUBLIC_BASE_URL}/artist/${product.user.username}`,

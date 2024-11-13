@@ -46,7 +46,7 @@ function Hero() {
             etc.
           </p>
           <div className="mt-12 flex flex-col gap-x-6 gap-y-4 sm:flex-row">
-            <Button href="/credit-card-compared">Compare Cards</Button>
+            <Button href="/credit-card-compare">Compare Cards</Button>
             <Button variant="secondary" href="#">
               Compare Deals
             </Button>
