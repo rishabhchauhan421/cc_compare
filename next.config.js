@@ -11,7 +11,10 @@ const nextConfig = {
   env: {
     siteName: 'Card Swami',
     seoBaseCountry: 'India',
+    seoRegion: 'New Delhi',
     supportEmail: 'help@thecustomcrow.com',
+    seoSiteDescription:
+      'Card Swami is a platform to explore credit cards and their benefits. We help you find the best credit card for your needs.',
   },
 }
 

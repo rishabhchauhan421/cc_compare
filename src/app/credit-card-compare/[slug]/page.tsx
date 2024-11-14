@@ -291,7 +291,7 @@ export default async function Post({ params: paramsPromise }: Args) {
           {dayjs(card1.createdAt).format('dddd, MMMM D, YYYY')}
         </Subheading>
         <Heading as="h1" className="mt-2">
-          {card1.name} vs {card2.name}
+          {seoTItle({ title1: card1.name, title2: card2.name })}
         </Heading>
         {/* <article className="pb-16 pt-16"> */}
         {/* TODO:  Add Breadcrumbs */}
@@ -345,8 +345,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                   <ComparisonCard>
                     <ComparisonItemRowFullWidth value={'Basic Information'} />
                     <ComparisonItemRow>
-                      <ComparisonItemHeadingCell value={'Network'} />
                       <ComparisonItemContentBoth
+                        headingValue={'Network'}
                         value1={
                           NetworkUtils.getNetworkDetails(card1.networkBrands[0])
                             .name
@@ -370,8 +370,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                       />
                     </ComparisonItemRow>
                     <ComparisonItemRow>
-                      <ComparisonItemHeadingCell value={'Material'} />
                       <ComparisonItemContentBoth
+                        headingValue={'Material'}
                         value1={toTitleCase(card1.cardMaterial)}
                         value2={toTitleCase(card2.cardMaterial)}
                         isCard1Better={cardMaterialResult.isCard1Better}
@@ -380,10 +380,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                     </ComparisonItemRow>
                     {isInviteOnlyResult.show && (
                       <ComparisonItemRow key={'basic-3'}>
-                        <ComparisonItemHeadingCell
-                          value={'Requires Invitation'}
-                        />
                         <ComparisonItemContentBoth
+                          headingValue={'Requires Invitation'}
                           value1={card1.isInviteOnly ? 'Yes' : 'No'}
                           value2={card2.isInviteOnly ? 'Yes' : 'No'}
                           isCard1Better={isInviteOnlyResult.isCard1Better}
@@ -393,8 +391,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                     )}
                     {conciergeResult.show && (
                       <ComparisonItemRow key={'basic-4'}>
-                        <ComparisonItemHeadingCell value={'Concierge'} />
                         <ComparisonItemContentBoth
+                          headingValue={'Concierge'}
                           value1={
                             ConciergeUtils.getConciergeData(card1.concierge)
                               .name
@@ -417,10 +415,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                     />
                     {minAgeSalariedResult.show && (
                       <ComparisonItemRow key={'eligibility-1'}>
-                        <ComparisonItemHeadingCell
-                          value={'Minimum Age Salaried'}
-                        />
                         <ComparisonItemContentBoth
+                          headingValue={'Minimum Age Salaried'}
                           value1={card1.minAgeSalaried.toString()}
                           value2={card2.minAgeSalaried.toString()}
                           isCard1Better={minAgeSalariedResult.isCard1Better}
@@ -430,10 +426,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                     )}
                     {maxAgeSalariedResult.show && (
                       <ComparisonItemRow key={'eligibility-2'}>
-                        <ComparisonItemHeadingCell
-                          value={'Maximum Age Salaried'}
-                        />
                         <ComparisonItemContentBoth
+                          headingValue={'Maximum Age Salaried'}
                           value1={
                             card1.maxAgeSalaried === 100
                               ? 'Not Specified'
@@ -450,8 +444,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                       </ComparisonItemRow>
                     )}
                     <ComparisonItemRow key={'eligibility-salary-1'}>
-                      <ComparisonItemHeadingCell value={'Minimum Net Salary'} />
                       <ComparisonItemContentBoth
+                        headingValue={'Minimum Net Salary'}
                         value1={
                           '₹' + card1.minNetIncomeSalaried.toString() + ' Lakhs'
                         }
@@ -463,10 +457,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                       />
                     </ComparisonItemRow>
                     <ComparisonItemRow key={'eligibility-3'}>
-                      <ComparisonItemHeadingCell
-                        value={'Minimum Age Self Employed'}
-                      />
                       <ComparisonItemContentBoth
+                        headingValue={'Minimum Age Self Employed'}
                         value1={card1.minAgeSelfEmployed.toString()}
                         value2={card2.minAgeSelfEmployed.toString()}
                         isCard1Better={minAgeSelfEmployedResult.isCard1Better}
@@ -474,10 +466,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                       />
                     </ComparisonItemRow>
                     <ComparisonItemRow key={'eligibility-4'}>
-                      <ComparisonItemHeadingCell
-                        value={'Maximum Age Self Employed'}
-                      />
                       <ComparisonItemContentBoth
+                        headingValue={'Maximum Age Self Employed'}
                         value1={
                           card1.maxAgeSelfEmployed === 100
                             ? 'Not Specified'
@@ -493,10 +483,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                       />
                     </ComparisonItemRow>
                     <ComparisonItemRow key={'eligibility-salary-2'}>
-                      <ComparisonItemHeadingCell
-                        value={'Minimum Net Income for Self Employed'}
-                      />
                       <ComparisonItemContentBoth
+                        headingValue={'Minimum Net Income for Self Employed'}
                         value1={
                           '₹' +
                           card1.minNetIncomeSelfEmployed.toString() +
@@ -524,8 +512,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                     />
 
                     <ComparisonItemRow key={'points-1'}>
-                      <ComparisonItemHeadingCell value={'1 Point Value'} />
                       <ComparisonItemContentBoth
+                        headingValue={'1 Point Value'}
                         value1={card1.pointsValue.toString()}
                         value2={card2.pointsValue.toString()}
                         isCard1Better={card1.pointsValue > card2.pointsValue}
@@ -533,10 +521,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                       />
                     </ComparisonItemRow>
                     <ComparisonItemRow key={'points-category-travel'}>
-                      <ComparisonItemHeadingCell
-                        value={'Travel Points Per ₹100'}
-                      />
                       <ComparisonItemContentBoth
+                        headingValue={'Travel Points Per ₹100'}
                         value1={card1.travelPointsPer100.toString()}
                         value2={card2.travelPointsPer100.toString()}
                         isCard1Better={
@@ -548,10 +534,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                       />
                     </ComparisonItemRow>
                     <ComparisonItemRow key={'points-category-shopping'}>
-                      <ComparisonItemHeadingCell
-                        value={'Shopping Points Per ₹100'}
-                      />
                       <ComparisonItemContentBoth
+                        headingValue={'Shopping Points Per ₹100'}
                         value1={card1.shoppingPointsPer100.toString()}
                         value2={card2.shoppingPointsPer100.toString()}
                         isCard1Better={
@@ -565,10 +549,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                       />
                     </ComparisonItemRow>
                     <ComparisonItemRow key={'points-category-dinning'}>
-                      <ComparisonItemHeadingCell
-                        value={'Dining Points Per ₹100'}
-                      />
                       <ComparisonItemContentBoth
+                        headingValue={'Dining Points Per ₹100'}
                         value1={card1.diningPointsPer100.toString()}
                         value2={card2.diningPointsPer100.toString()}
                         isCard1Better={
@@ -580,10 +562,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                       />
                     </ComparisonItemRow>
                     <ComparisonItemRow key={'points-category-fuel'}>
-                      <ComparisonItemHeadingCell
-                        value={'Fuel Points Per ₹100'}
-                      />
                       <ComparisonItemContentBoth
+                        headingValue={'Fuel Points Per ₹100'}
                         value1={card1.fuelPointsPer100.toString()}
                         value2={card2.fuelPointsPer100.toString()}
                         isCard1Better={
@@ -595,10 +575,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                       />
                     </ComparisonItemRow>
                     <ComparisonItemRow key={'points-category-grocery'}>
-                      <ComparisonItemHeadingCell
-                        value={'Grocery Points Per ₹100'}
-                      />
                       <ComparisonItemContentBoth
+                        headingValue={'Grocery Points Per ₹100'}
                         value1={card1.groceryPointsPer100.toString()}
                         value2={card2.groceryPointsPer100.toString()}
                         isCard1Better={
@@ -610,10 +588,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                       />
                     </ComparisonItemRow>
                     <ComparisonItemRow key={'points-category-utility'}>
-                      <ComparisonItemHeadingCell
-                        value={'Utility Points Per ₹100'}
-                      />
                       <ComparisonItemContentBoth
+                        headingValue={'Utility Points Per ₹100'}
                         value1={card1.utilityPointsPer100.toString()}
                         value2={card2.utilityPointsPer100.toString()}
                         isCard1Better={
@@ -626,10 +602,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                     </ComparisonItemRow>
                     {insurancePointsPer100SpentResult.show && (
                       <ComparisonItemRow key={'points-category-insurance'}>
-                        <ComparisonItemHeadingCell
-                          value={'Insurance Points Per ₹100'}
-                        />
                         <ComparisonItemContentBoth
+                          headingValue={'Insurance Points Per ₹100'}
                           value1={card1.insurancePointsPer100.toString()}
                           value2={card2.insurancePointsPer100.toString()}
                           isCard1Better={
@@ -645,10 +619,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                     )}
                     {governmentTaxPointsPer100SpentResult.show && (
                       <ComparisonItemRow key={'points-category-government'}>
-                        <ComparisonItemHeadingCell
-                          value={'Government Points Per ₹100'}
-                        />
                         <ComparisonItemContentBoth
+                          headingValue={'Government Points Per ₹100'}
                           value1={card1.governmentPointsPer100.toString()}
                           value2={card2.governmentPointsPer100.toString()}
                           isCard1Better={
@@ -664,10 +636,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                     )}
                     {rentPointsPer100SpentResult.show && (
                       <ComparisonItemRow key={'points-category-rent'}>
-                        <ComparisonItemHeadingCell
-                          value={'Rent Points Per ₹100'}
-                        />
                         <ComparisonItemContentBoth
+                          headingValue={'Rent Points Per ₹100'}
                           value1={card1.rentPointsPer100.toString()}
                           value2={card2.rentPointsPer100.toString()}
                           isCard1Better={
@@ -681,10 +651,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                     )}
                     {emiPointsPer100SpentResult.show && (
                       <ComparisonItemRow key={'points-category-emi'}>
-                        <ComparisonItemHeadingCell
-                          value={'EMI Points Per ₹100'}
-                        />
                         <ComparisonItemContentBoth
+                          headingValue={'EMI Points Per ₹100'}
                           value1={card1.emiPointsPer100.toString()}
                           value2={card2.emiPointsPer100.toString()}
                           isCard1Better={
@@ -698,8 +666,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                     )}
                     {pointsConversionResult.show && (
                       <ComparisonItemRow key={'points-category-insurance'}>
-                        <ComparisonItemHeadingCell value={'Points Terms'} />
                         <ComparisonItemContentBoth
+                          headingValue={'Points Terms'}
                           value1={card1.pointsConversion[0]}
                           value2={card2.pointsConversion[0]}
                           value1Array={card1.pointsConversion}
@@ -720,8 +688,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                       <ComparisonItemRow
                       // key={'fees-1'}
                       >
-                        <ComparisonItemHeadingCell value={'Joining Fee'} />
                         <ComparisonItemContentBoth
+                          headingValue={'Joining Fee'}
                           value1={'₹' + card1.joiningFee}
                           value2={'₹' + card2.joiningFee}
                           isCard1Better={card1.joiningFee < card2.joiningFee}
@@ -731,8 +699,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                     )}
                     {annualFeeResult.show && (
                       <ComparisonItemRow key={'annual-fee'}>
-                        <ComparisonItemHeadingCell value={'Annual Fee'} />
                         <ComparisonItemContentBoth
+                          headingValue={'Annual Fee'}
                           value1={'₹' + card1.annualFee}
                           value2={'₹' + card2.annualFee}
                           isCard1Better={card1.annualFee < card2.annualFee}
@@ -742,10 +710,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                     )}
                     {minAmountForAnnualFeeWaiverResult.show && (
                       <ComparisonItemRow key={'annual-fee-waiver'}>
-                        <ComparisonItemHeadingCell
-                          value={'Minimum amount for Annual Fee waiver'}
-                        />
                         <ComparisonItemContentBoth
+                          headingValue={'Minimum amount for Annual Fee waiver'}
                           value1={'₹' + card1.minAmountForAnnualFeeWaiver}
                           value2={'₹' + card2.minAmountForAnnualFeeWaiver}
                           isCard1Better={
@@ -760,10 +726,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                     {signupBonusValueResult.show && (
                       <>
                         <ComparisonItemRow key={'signup Bonus'}>
-                          <ComparisonItemHeadingCell
-                            value={'Welcome/Signup Bonus'}
-                          />
                           <ComparisonItemContentBoth
+                            headingValue={'Welcome/Signup Bonus'}
                             value1={
                               card1.signupBonus.length === 0
                                 ? 'None'
@@ -779,8 +743,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                           />
                         </ComparisonItemRow>
                         <ComparisonItemRow key={'signup Bonus Value'}>
-                          <ComparisonItemHeadingCell value={'Bonus Value'} />
                           <ComparisonItemContentBoth
+                            headingValue={'Bonus Value'}
                             value1={'₹' + card1.signupBonusValue.toString()}
                             value2={'₹' + card2.signupBonusValue.toString()}
                             isCard1Better={signupBonusValueResult.isCard1Better}
@@ -791,10 +755,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                     )}
                     {signupBonusTermsResult.show && (
                       <ComparisonItemRow key={'signup Bonus'}>
-                        <ComparisonItemHeadingCell
-                          value={'Signup Bonus Terms'}
-                        />
                         <ComparisonItemContentBoth
+                          headingValue={'Signup Bonus Terms'}
                           value1={card1.signupBonusTerms[0]}
                           value2={card2.signupBonusTerms[0]}
                           value1Array={card1.signupBonusTerms}
@@ -813,10 +775,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                     />
                     {(card1.domesticLounge > 0 || card2.domesticLounge > 0) && (
                       <ComparisonItemRow key={'airport-longue'}>
-                        <ComparisonItemHeadingCell
-                          value={'Available Domestic Lounge'}
-                        />
                         <ComparisonItemContentBoth
+                          headingValue={'Available Domestic Lounge'}
                           value1={
                             card1.domesticLounge === 1000000000
                               ? 'Unlimited'
@@ -839,10 +799,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                     {(card1.internationalLounge > 0 ||
                       card2.internationalLounge > 0) && (
                       <ComparisonItemRow key={'airport-longue'}>
-                        <ComparisonItemHeadingCell
-                          value={'Available International Lounge'}
-                        />
                         <ComparisonItemContentBoth
+                          headingValue={'Available International Lounge'}
                           value1={
                             card1.internationalLounge === 1000000000
                               ? 'Unlimited'
@@ -866,10 +824,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                     )}
                     {(card1.globalLounge > 0 || card2.globalLounge > 0) && (
                       <ComparisonItemRow key={'airport-longue'}>
-                        <ComparisonItemHeadingCell
-                          value={'Available Global Lounge'}
-                        />
                         <ComparisonItemContentBoth
+                          headingValue={'Available Global Lounge'}
                           value1={
                             card1.globalLounge === 1000000000
                               ? 'Unlimited'
@@ -892,10 +848,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                     {(card1.domesticGuestLounge > 0 ||
                       card2.domesticGuestLounge > 0) && (
                       <ComparisonItemRow key={'airport-longue-domestic-guest'}>
-                        <ComparisonItemHeadingCell
-                          value={'Available Domestic Lounge for Guest'}
-                        />
                         <ComparisonItemContentBoth
+                          headingValue={'Available Domestic Lounge for Guest'}
                           value1={
                             card1.domesticGuestLounge === 1000000000
                               ? 'Unlimited'
@@ -922,10 +876,10 @@ export default async function Post({ params: paramsPromise }: Args) {
                       <ComparisonItemRow
                         key={'airport-longue-international-guest'}
                       >
-                        <ComparisonItemHeadingCell
-                          value={'Available International Lounge for Guest'}
-                        />
                         <ComparisonItemContentBoth
+                          headingValue={
+                            'Available International Lounge for Guest'
+                          }
                           value1={
                             card1.internationalGuestLounge === 1000000000
                               ? 'Unlimited'
@@ -952,10 +906,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                       <ComparisonItemRow
                         key={'airport-longue-international-guest'}
                       >
-                        <ComparisonItemHeadingCell
-                          value={'Available Global Lounge for Guest'}
-                        />
                         <ComparisonItemContentBoth
+                          headingValue={'Available Global Lounge for Guest'}
                           value1={
                             card1.globalGuestLounge === 1000000000
                               ? 'Unlimited'
@@ -978,8 +930,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                     {(card1.loungeAccessTerms.length > 0 ||
                       card2.loungeAccessTerms.length > 0) && (
                       <ComparisonItemRow key={'lounge-terms'}>
-                        <ComparisonItemHeadingCell value={'Lounge Terms'} />
                         <ComparisonItemContentBoth
+                          headingValue={'Lounge Terms'}
                           value1={card1.loungeAccessTerms[0]}
                           value2={card2.loungeAccessTerms[0]}
                           value1Array={card1.loungeAccessTerms}
@@ -1009,8 +961,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                       />
                       {membershipTajResult.show && (
                         <ComparisonItemRow key={'hotels-1'}>
-                          <ComparisonItemHeadingCell value={'Taj Epicure'} />
                           <ComparisonItemContentBoth
+                            headingValue={'Taj Epicure'}
                             value1={
                               HotelUtils.getTajMembershipData(
                                 card1.membershipTaj,
@@ -1028,8 +980,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                       )}
                       {membershipBonvoyResult.show && (
                         <ComparisonItemRow key={'hotels-2'}>
-                          <ComparisonItemHeadingCell value={'Mariott Bonvoy'} />
                           <ComparisonItemContentBoth
+                            headingValue={'Mariott Bonvoy'}
                             value1={
                               HotelUtils.getBonvoyMembershipData(
                                 card1.membershipBonvoy,
@@ -1047,8 +999,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                       )}
                       {membershipHiltonHonorsResult.show && (
                         <ComparisonItemRow key={'hotels-3'}>
-                          <ComparisonItemHeadingCell value={'Hilton Honors'} />
                           <ComparisonItemContentBoth
+                            headingValue={'Hilton Honors'}
                             value1={
                               HotelUtils.getHiltonHonorsMembershipData(
                                 card1.membershipHiltonHonors,
@@ -1070,10 +1022,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                       )}
                       {membershipHotelRadissonResult.show && (
                         <ComparisonItemRow key={'hotels-4'}>
-                          <ComparisonItemHeadingCell
-                            value={'Radisson Membership'}
-                          />
                           <ComparisonItemContentBoth
+                            headingValue={'Radisson Membership'}
                             value1={
                               HotelUtils.getRadissonMembershipData(
                                 card1.membershipHotelRadisson,
@@ -1095,8 +1045,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                       )}
                       {membershipAccorPlusResult.show && (
                         <ComparisonItemRow key={'hotels-5'}>
-                          <ComparisonItemHeadingCell value={'Accor Plus'} />
                           <ComparisonItemContentBoth
+                            headingValue={'Accor Plus'}
                             value1={
                               HotelUtils.getAccorPlusMembershipData(
                                 card1.membershipAccorPlus,
@@ -1118,10 +1068,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                       )}
                       {membershipIPreferResult.show && (
                         <ComparisonItemRow key={'hotels-6'}>
-                          <ComparisonItemHeadingCell
-                            value={'IPrefer Hotel Rewards'}
-                          />
                           <ComparisonItemContentBoth
+                            headingValue={'IPrefer Hotel Rewards'}
                             value1={
                               HotelUtils.getIPreferMembershipData(
                                 card1.membershipIPrefer,
@@ -1143,10 +1091,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                       )}
                       {membershipPostcardSunshineClubResult.show && (
                         <ComparisonItemRow key={'hotels-7'}>
-                          <ComparisonItemHeadingCell
-                            value={'Sunchine Club Membership'}
-                          />
                           <ComparisonItemContentBoth
+                            headingValue={'Sunshine Club Membership'}
                             value1={
                               HotelUtils.getSunshineClubMembershipData(
                                 card1.membershipPostcardSunshineClub,
@@ -1175,8 +1121,8 @@ export default async function Post({ params: paramsPromise }: Args) {
                     />
 
                     <ComparisonItemRow key={'intro-offers-1'}>
-                      <ComparisonItemHeadingCell value={'Perks'} />
                       <ComparisonItemContentBoth
+                        headingValue={'Perks'}
                         value1={card1.perks[0]}
                         value2={card2.perks[0]}
                         value1Array={card1.perks}
@@ -1188,10 +1134,8 @@ export default async function Post({ params: paramsPromise }: Args) {
 
                     {membershipResult.show && (
                       <ComparisonItemRow key={'intro-offers-2'}>
-                        <ComparisonItemHeadingCell
-                          value={'Introductory Offers'}
-                        />
                         <ComparisonItemContentBoth
+                          headingValue={'Introductory Offers'}
                           value1={card1.membership[0]}
                           value2={card2.membership[0]}
                           value1Array={card1.membership}
@@ -1203,7 +1147,9 @@ export default async function Post({ params: paramsPromise }: Args) {
                     )}
 
                     <ComparisonItemRow key={'affiliate-links'}>
-                      <ComparisonItemHeadingCell value={'Apply Now'} />
+                      <td className="text-md font-medium text-gray-900">
+                        {'Apply Now'}
+                      </td>
                       <td
                         key=""
                         // className="whitespace-normal break-words px-3 py-4 text-sm text-gray-500 sm:whitespace-nowrap sm:truncate"
@@ -1330,9 +1276,16 @@ export async function generateMetadata({
       },
     },
   })
+  // join tags from both creditcards with vs and all permutations
+  const set = new Set<string>()
+  for (let i = 0; i < card1.tags.length; i++) {
+    for (let j = 0; j < card2.tags.length; j++) {
+      set.add(card1.tags[i] + ' vs ' + card2.tags[j])
+    }
+  }
 
   return {
-    title: `${creditCards[0].name} vs ${creditCards[1].name}: Which is better`,
+    title: `${seoTItle({ title1: card1.name, title2: card2.name })}: Which is better?`,
     description: `Discover how ${card1.name} and ${card2.name} stack up against each other in terms of cashback, annual fees, and exclusive perks.`,
     authors: {
       name: `Rishabh Chauhan`,
@@ -1341,15 +1294,11 @@ export async function generateMetadata({
     alternates: {
       canonical: `${env.NEXT_PUBLIC_BASE_URL}/credit-card-compare/${comparisonSlug?.slug}`,
     },
-    keywords: [
-      `${card1.name} vs ${card2.name}`,
-      ...creditCards[0].tags,
-      ...creditCards[1].tags,
-    ],
+    keywords: [`${card1.name} vs ${card2.name}`, ...Array.from(set)],
     publisher: process.env.siteName,
     openGraph: {
       type: 'website',
-      title: `${creditCards[0].name} vs ${creditCards[1].name}: Which is better| CS`,
+      title: `${seoTItle({ title1: card1.name, title2: card2.name })}: Which is better?`,
       description: `Discover how ${card1.name} and ${card2.name} stack up against each other in terms of cashback, annual fees, and exclusive perks.`,
       countryName: process.env.seoBaseCountry,
       url: `${env.NEXT_PUBLIC_BASE_URL}/credit-card-compare/${comparisonSlug?.slug}`,
@@ -1411,10 +1360,11 @@ const ComparisonItemRowFullWidth = ({ value }: { value: String }) => {
 const ComparisonItemRow = ({ children }: { children: React.ReactNode }) => {
   return <tr className="border-t border-gray-200">{children}</tr>
 }
-const ComparisonItemHeadingCell = ({ value }: { value: String }) => {
-  return <td className="text-md font-medium text-gray-900 sm:pl-3">{value}</td>
-}
+// const ComparisonItemHeadingCell = ({ value }: { value: String }) => {
+//   return
+// }
 const ComparisonItemContentBoth = ({
+  headingValue,
   value1,
   value2,
   value1Array,
@@ -1422,6 +1372,7 @@ const ComparisonItemContentBoth = ({
   isCard1Better,
   isCard2Better,
 }: {
+  headingValue: String
   value1: String
   value2: String
   value1Array?: String[]
@@ -1433,6 +1384,7 @@ const ComparisonItemContentBoth = ({
   const card2Formatting = isCard2Better ? 'bg-green-200' : ''
   return (
     <>
+      <td className="text-md font-medium text-gray-900">{headingValue}</td>
       <td
         key=""
         className={'px-3 py-4 text-sm text-gray-500 ' + card1Formatting}
@@ -1466,13 +1418,12 @@ const ComparisonItemContentBoth = ({
     </>
   )
 }
-// const ComparisonItemContentCell = ({ value }: { value: String }) => {
-//   return (
-//     <td
-//       className="whitespace-normal break-words px-3 py-4 text-sm text-gray-500 sm:whitespace-nowrap sm:truncate"
-//       style={{ maxWidth: '150px' }}
-//     >
-//       {value}
-//     </td>
-//   )
-// }
+
+function seoTItle({ title1, title2 }: { title1: string; title2: string }) {
+  for (var i = 0; i < title1.length && i < title2.length; i++) {
+    if (title1[i] !== title2[i]) {
+      return `${title1} vs ${title2.slice(i, title2.length)}`
+    }
+  }
+  return `${title1} vs ${title2}`
+}
