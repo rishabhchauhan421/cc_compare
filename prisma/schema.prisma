@@ -92,6 +92,7 @@ model CreditCard{
 
 
   airportConcierge          Int                     @default(0)
+  airportMeetAndGreet       String[]                @default([])
 
   bookMyShowBenefits        Int                     @default(0)
 
