@@ -39,11 +39,12 @@ type Args = {
   params: Promise<{
     slug?: string
   }>
-  searchParams: { [key: string]: string | string[] | undefined }
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
 async function getComparisonSlug({ params, searchParams }: Args) {
-  const page = parseInt((searchParams.page as string) ?? '1')
+  const searchParamsProp = await searchParams
+  const page = parseInt((searchParamsProp.page as string) ?? '1')
   const limit = 9
 
   const comparisonSlug = await db.comparisonSlug.findMany({
@@ -57,15 +58,13 @@ async function getComparisonSlug({ params, searchParams }: Args) {
   return comparisonSlug
 }
 
-export default async function Post({
-  params: paramsPromise,
-  searchParams,
-}: Args) {
+export default async function page(props: Args) {
+  const searchParams = await props.searchParams
   const page = parseInt((searchParams.page as string) ?? '1')
   const limit = 9
   const comparisonSlug = await getComparisonSlug({
-    params: paramsPromise,
-    searchParams,
+    params: props.params,
+    searchParams: props.searchParams,
   })
 
   return (
@@ -201,13 +200,10 @@ export default async function Post({
   )
 }
 
-export async function generateMetadata({
-  params: paramsPromise,
-  searchParams,
-}: Args) {
+export async function generateMetadata(props: Args) {
   const comparisonSlug = await getComparisonSlug({
-    params: paramsPromise,
-    searchParams,
+    params: props.params,
+    searchParams: props.searchParams,
   })
 
   return {
