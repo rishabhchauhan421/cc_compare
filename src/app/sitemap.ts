@@ -1,76 +1,66 @@
-import { db } from '@/db/prismaDb'
-import { env } from '@/env'
+import { MetadataRoute } from 'next';
+import { getAllPosts } from '@/lib/wordpress';
+import { siteConfig } from '@/../site.config';
+import { db } from '@/db/prismaDb';
 
-export default async function sitemap() {
-  const baseUrl = env.NEXT_PUBLIC_BASE_URL
-
-  //Get All products from DB
-  // const creditcards = await db.creditCard.findMany({
-  //   where: {
-  //     isDeleted: false,
-  //   },
-  // })
-  // const creditCardUrls =
-  //   creditcards.map((creditCard) => {
-  //     return {
-  //       url: baseUrl + `/${creditCard.slug}/cc/${creditCard.id}`,
-  //       lastModified: creditCard.updatedAt,
-  //     }
-  //   }) ?? []
-
-  const comparisonSlug = await db.comparisonSlug.findMany({})
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const comparisonSlug = await db.comparisonSlug.findMany({});
   const comparisonUrls =
-    comparisonSlug.map((comparison) => {
+    comparisonSlug.map((comparison: any) => {
       return {
-        url: baseUrl + `/credit-card-compare/${comparison.slug}`,
+        url: siteConfig.site_domain + `/credit-card-compare/${comparison.slug}`,
         lastModified: comparison.updatedAt,
-      }
-    }) ?? []
+      };
+    }) ?? [];
 
-  return [
+  const posts = await getAllPosts();
+
+  const staticUrls: MetadataRoute.Sitemap = [
     {
-      url: baseUrl,
+      url: `${siteConfig.site_domain}`,
       lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 1,
     },
-    // ...creditCardUrls,
     ...comparisonUrls,
-    // {
-    //   url: `${baseUrl}/about-us`,
-    //   lastModified: new Date(),
-    // },
-    // {
-    //   url: `${baseUrl}/contact-us`,
-    //   lastModified: new Date(),
-    // },
-    // {
-    //   url: `${baseUrl}/copyright`,
-    //   lastModified: new Date(),
-    // },
-    // {
-    //   url: `${baseUrl}/faq`,
-    //   lastModified: new Date(),
-    // },
-    // {
-    //   url: `${baseUrl}/privacy-policy`,
-    //   lastModified: new Date(),
-    // },
-    // {
-    //   url: `${baseUrl}/shipping`,
-    //   lastModified: new Date(),
-    // },
-    // {
-    //   url: `${baseUrl}/terms-of-use`,
-    //   lastModified: new Date(),
-    // },
-    // {
-    //   url: `${baseUrl}/login`,
-    //   lastModified: new Date(),
-    // },
-    // {
-    //   url: `${baseUrl}/register`,
-    //   lastModified: new Date(),
-    // },
+    {
+      url: `${siteConfig.site_domain}/posts`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+    {
+      url: `${siteConfig.site_domain}/pages`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.5,
+    },
+    {
+      url: `${siteConfig.site_domain}/authors`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.5,
+    },
+    {
+      url: `${siteConfig.site_domain}/categories`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.5,
+    },
+    {
+      url: `${siteConfig.site_domain}/tags`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.5,
+    },
+  ];
 
-    // ...collectionUrls,
-  ]
+  const postUrls: MetadataRoute.Sitemap = posts.map((post) => ({
+    url: `${siteConfig.site_domain}/posts/${post.slug}`,
+    lastModified: new Date(post.modified),
+    changeFrequency: 'weekly',
+    priority: 0.5,
+  }));
+
+  return [...staticUrls, ...postUrls];
 }

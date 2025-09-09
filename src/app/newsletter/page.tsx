@@ -1,11 +1,11 @@
-import { env } from '@/env'
-import type { Metadata } from 'next'
-import Link from 'next/link'
+import { env } from '@/env';
+import type { Metadata } from 'next';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Contact Us',
   description: 'Contact Us',
-}
+};
 
 export default function page() {
   // const [agreed, setAgreed] = useState(false);
@@ -26,14 +26,14 @@ export default function page() {
       </div>
       <div className="mx-auto max-w-2xl text-center">
         <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-          Comming Soon!
+          Coming Soon!
         </h1>
         <p className="mt-2 text-lg leading-8 text-gray-600">
           We are working on it. Please show us your support by mailing to us on.{' '}
           {''}
-          <Link href={'mailto:' + env.NEXT_PUBLIC_supportEmail}>
+          {/* <Link href={'mailto:' + env.NEXT_PUBLIC_supportEmail}>
             {env.NEXT_PUBLIC_supportEmail}
-          </Link>{' '}
+          </Link>{' '} */}
           {/* <br /> */}
           {/* or visit at: <br />
           {process.env.orgAddress} */}
@@ -41,5 +41,5 @@ export default function page() {
       </div>
       {/* <ContactUsForm /> */}
     </div>
-  )
+  );
 }

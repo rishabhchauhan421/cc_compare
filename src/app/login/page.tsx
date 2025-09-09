@@ -1,16 +1,15 @@
-import { Button } from '@/components/button'
-import { GradientBackground } from '@/components/gradient'
-import { Link } from '@/components/link'
-import { Mark } from '@/components/logo'
-import { Checkbox, Field, Input, Label } from '@headlessui/react'
-import { CheckIcon } from '@heroicons/react/16/solid'
-import { clsx } from 'clsx'
-import type { Metadata } from 'next'
+import { Button } from '@/components/ui/button';
+import { GradientBackground } from '@/components/gradient';
+import Link from 'next/link';
+import { Checkbox, Field, Input, Label } from '@headlessui/react';
+import { CheckIcon } from '@heroicons/react/16/solid';
+import { clsx } from 'clsx';
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Login',
   description: 'Sign in to your account to continue.',
-}
+};
 
 export default function Login() {
   return (
@@ -21,7 +20,7 @@ export default function Login() {
           <form action="#" method="POST" className="p-7 sm:p-11">
             <div className="flex items-start">
               <Link href="/" title="Home">
-                <Mark className="h-9 fill-black" />
+                {/* <Mark className="h-9 fill-black" /> */}
               </Link>
             </div>
             <h1 className="mt-8 text-base/6 font-medium">Welcome back!</h1>
@@ -38,7 +37,7 @@ export default function Login() {
                 className={clsx(
                   'block w-full rounded-lg border border-transparent shadow ring-1 ring-black/10',
                   'px-[calc(theme(spacing.2)-1px)] py-[calc(theme(spacing[1.5])-1px)] text-base/6 sm:text-sm/6',
-                  'data-[focus]:outline data-[focus]:outline-2 data-[focus]:-outline-offset-1 data-[focus]:outline-black',
+                  'data-[focus]:outline data-[focus]:outline-2 data-[focus]:-outline-offset-1 data-[focus]:outline-black'
                 )}
               />
             </Field>
@@ -51,7 +50,7 @@ export default function Login() {
                 className={clsx(
                   'block w-full rounded-lg border border-transparent shadow ring-1 ring-black/10',
                   'px-[calc(theme(spacing.2)-1px)] py-[calc(theme(spacing[1.5])-1px)] text-base/6 sm:text-sm/6',
-                  'data-[focus]:outline data-[focus]:outline-2 data-[focus]:-outline-offset-1 data-[focus]:outline-black',
+                  'data-[focus]:outline data-[focus]:outline-2 data-[focus]:-outline-offset-1 data-[focus]:outline-black'
                 )}
               />
             </Field>
@@ -62,7 +61,7 @@ export default function Login() {
                   className={clsx(
                     'group block size-4 rounded border border-transparent shadow ring-1 ring-black/10 focus:outline-none',
                     'data-[checked]:bg-black data-[checked]:ring-black',
-                    'data-[focus]:outline data-[focus]:outline-2 data-[focus]:outline-offset-2 data-[focus]:outline-black',
+                    'data-[focus]:outline data-[focus]:outline-2 data-[focus]:outline-offset-2 data-[focus]:outline-black'
                   )}
                 >
                   <CheckIcon className="fill-white opacity-0 group-data-[checked]:opacity-100" />
@@ -88,5 +87,5 @@ export default function Login() {
         </div>
       </div>
     </main>
-  )
+  );
 }

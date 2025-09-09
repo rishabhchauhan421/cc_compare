@@ -1,5 +1,5 @@
-import { createEnv } from '@t3-oss/env-nextjs'
-import { z } from 'zod'
+import { createEnv } from '@t3-oss/env-nextjs';
+import { z } from 'zod';
 
 export const env = createEnv({
   /*
@@ -65,7 +65,7 @@ export const env = createEnv({
     NEXT_PUBLIC_GOOGLE_TAG: z.string().min(1),
 
     // next.config.js variables
-    NEXT_PUBLIC_siteName: z.string().min(1),
+    // NEXT_PUBLIC_siteName: z.string().min(1),
     // NEXT_PUBLIC_siteNameCamelCase: z.string().min(1),
     // NEXT_PUBLIC_siteNameCapitalCase: z.string().min(1),
     // NEXT_PUBLIC_OpenGraphSiteName: z.string().min(1),
@@ -74,14 +74,14 @@ export const env = createEnv({
     // NEXT_PUBLIC_seoSiteBannerImage: z.string().min(1),
     // NEXT_PUBLIC_seoProductNotFoundTitleTitle: z.string().min(1),
     // NEXT_PUBLIC_seoProductNotFoundDescription: z.string().min(1),
-    NEXT_PUBLIC_seoBaseCountry: z.string().min(1),
-    NEXT_PUBLIC_seoRegion: z.string().min(1),
+    // NEXT_PUBLIC_seoBaseCountry: z.string().min(1),
+    // NEXT_PUBLIC_seoRegion: z.string().min(1),
     // NEXT_PUBLIC_pageTitleSuffix: z.string().min(1),
     // NEXT_PUBLIC_siteDescription: z.string().min(1),
-    NEXT_PUBLIC_seoSiteDescription: z.string().min(1),
+    // NEXT_PUBLIC_seoSiteDescription: z.string().min(1),
     // NEXT_PUBLIC_seoSiteDescriptionSuffix: z.string().min(1),
     // NEXT_PUBLIC_creator: z.string().min(1),
-    NEXT_PUBLIC_supportEmail: z.string().min(1),
+    // NEXT_PUBLIC_supportEmail: z.string().min(1),
     // NEXT_PUBLIC_artistSupportEmail: z.string().min(1),
     // NEXT_PUBLIC_defaultProductPrice: z.string().min(1),
     // NEXT_PUBLIC_instagramUrl: z.string().min(1),
@@ -147,7 +147,7 @@ export const env = createEnv({
     // NEXT_PUBLIC_SHIPPING_COST: process.env.NEXT_PUBLIC_SHIPPING_COST,
 
     // // From next.config.js
-    NEXT_PUBLIC_siteName: process.env.siteName,
+    // NEXT_PUBLIC_siteName: process.env.siteName,
     //     NEXT_PUBLIC_siteNameCamelCase: process.env.siteNameCamelCase,
     //     NEXT_PUBLIC_siteNameCapitalCase: process.env.siteNameCapitalCase,
     //     NEXT_PUBLIC_OpenGraphSiteName: process.env.OpenGraphSiteName,
@@ -156,14 +156,14 @@ export const env = createEnv({
     //     NEXT_PUBLIC_seoSiteBannerImage: process.env.seoSiteBannerImage,
     //     NEXT_PUBLIC_seoProductNotFoundTitleTitle: process.env.seoProductNotFoundTitleTitle,
     //     NEXT_PUBLIC_seoProductNotFoundDescription: process.env.seoProductNotFoundDescription,
-    NEXT_PUBLIC_seoBaseCountry: process.env.seoBaseCountry,
-    NEXT_PUBLIC_seoRegion: process.env.seoRegion,
+    // NEXT_PUBLIC_seoBaseCountry: process.env.seoBaseCountry,
+    // NEXT_PUBLIC_seoRegion: process.env.seoRegion,
     //     NEXT_PUBLIC_pageTitleSuffix: process.env.pageTitleSuffix,
     //     NEXT_PUBLIC_siteDescription: process.env.siteDescription,
-    NEXT_PUBLIC_seoSiteDescription: process.env.seoSiteDescription,
+    // NEXT_PUBLIC_seoSiteDescription: process.env.seoSiteDescription,
     //     NEXT_PUBLIC_seoSiteDescriptionSuffix: process.env.seoSiteDescriptionSuffix,
     //     NEXT_PUBLIC_creator: process.env.creator,
-    NEXT_PUBLIC_supportEmail: process.env.supportEmail,
+    // NEXT_PUBLIC_supportEmail: process.env.supportEmail,
     //     NEXT_PUBLIC_artistSupportEmail: process.env.artistSupportEmail,
     //     NEXT_PUBLIC_defaultProductPrice: process.env.defaultProductPrice,
     //     NEXT_PUBLIC_instagramUrl: process.env.instagramUrl,
@@ -176,4 +176,4 @@ export const env = createEnv({
     // NEXT_PUBLIC_MIN_BACK_IMAGES_PER_COLOR:process.env.NEXT_PUBLIC_MIN_BACK_IMAGES_PER_COLOR,
     // NEXT_PUBLIC_MIN_FRONT_IMAGES_PER_COLOR:process.env.NEXT_PUBLIC_MIN_FRONT_IMAGES_PER_COLOR,
   },
-})
+});

@@ -1,11 +1,11 @@
-import { Container } from '@/components/container'
-import { Footer } from '@/components/footer'
-import { GradientBackground } from '@/components/gradient'
-import { Navbar } from '@/components/navbar'
-import { Heading, Subheading } from '@/components/text'
-import { db } from '@/db/prismaDb'
-import { env } from '@/env'
-import Link from 'next/link'
+import { Container } from '@/components/container';
+// import { Footer } from '@/components/footer';
+import { GradientBackground } from '@/components/gradient';
+import { MobileNav } from '@/components/nav/mobile-nav';
+import { Heading, Subheading } from '@/components/text';
+import { db } from '@/db/prismaDb';
+// import { env } from '@/env';
+import Link from 'next/link';
 
 // export async function generateStaticParams() {
 //   const creditCards = await db.creditCard.findMany({
@@ -37,15 +37,15 @@ import Link from 'next/link'
 
 type Args = {
   params: Promise<{
-    slug?: string
-  }>
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
-}
+    slug?: string;
+  }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
 
 async function getComparisonSlug({ params, searchParams }: Args) {
-  const searchParamsProp = await searchParams
-  const page = parseInt((searchParamsProp.page as string) ?? '1')
-  const limit = 9
+  const searchParamsProp = await searchParams;
+  const page = parseInt((searchParamsProp.page as string) ?? '1');
+  const limit = 9;
 
   const comparisonSlug = await db.comparisonSlug.findMany({
     orderBy: {
@@ -53,25 +53,25 @@ async function getComparisonSlug({ params, searchParams }: Args) {
     },
     skip: (page - 1) * limit,
     take: limit,
-  })
+  });
 
-  return comparisonSlug
+  return comparisonSlug;
 }
 
 export default async function page(props: Args) {
-  const searchParams = await props.searchParams
-  const page = parseInt((searchParams.page as string) ?? '1')
-  const limit = 9
+  const searchParams = await props.searchParams;
+  const page = parseInt((searchParams.page as string) ?? '1');
+  const limit = 9;
   const comparisonSlug = await getComparisonSlug({
     params: props.params,
     searchParams: props.searchParams,
-  })
+  });
 
   return (
     <main className="overflow-hidden">
       <GradientBackground />
       <Container>
-        <Navbar />
+        <MobileNav />
         <Subheading className="mt-16">
           {/* {dayjs(card1.createdAt).format('dddd, MMMM D, YYYY')} */}
         </Subheading>
@@ -99,7 +99,7 @@ export default async function page(props: Args) {
                 role="list"
                 className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
               >
-                {comparisonSlug.map((comparisonSlug) => (
+                {comparisonSlug.map((comparisonSlug: any) => (
                   <li
                     key={comparisonSlug.comparisonSlugId}
                     className="col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow"
@@ -195,16 +195,16 @@ export default async function page(props: Args) {
         {/* </article> */}
         <div className="mt-3"></div>
       </Container>
-      <Footer />
+      {/* <Footer /> */}
     </main>
-  )
+  );
 }
 
 export async function generateMetadata(props: Args) {
   const comparisonSlug = await getComparisonSlug({
     params: props.params,
     searchParams: props.searchParams,
-  })
+  });
 
   return {
     title: `Credit Card vs Credit Card: Which is better`,
@@ -226,7 +226,7 @@ export async function generateMetadata(props: Args) {
       title: `Credit Card vs Credit Card: Which is better`,
       description: `Discover how credit cards stack up against each other in terms of cashback, annual fees, and exclusive perks.`,
       countryName: process.env.seoBaseCountry,
-      siteName: env.NEXT_PUBLIC_siteName,
+      // siteName: env.NEXT_PUBLIC_siteName,
     },
-  }
+  };
 }
