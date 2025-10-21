@@ -1,18 +1,18 @@
-import { Button } from '@/components/ui/button';
-import { GradientBackground } from '@/components/gradient';
-import Link from 'next/link';
-// import { Checkbox, Field, Input, Label } from '@headlessui/react';
-import { CheckIcon } from '@heroicons/react/16/solid';
-import { clsx } from 'clsx';
-import type { Metadata } from 'next';
-import { Form, FormField } from '@/components/ui/form';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
+// import { Button } from '@/components/ui/button';
+// import { GradientBackground } from '@/components/gradient';
+// import Link from 'next/link';
+// // import { Checkbox, Field, Input, Label } from '@headlessui/react';
+// import { CheckIcon } from '@heroicons/react/16/solid';
+// import { clsx } from 'clsx';
+// import type { Metadata } from 'next';
+// import { Form, FormField } from '@/components/ui/form';
+// import { Label } from '@/components/ui/label';
+// import { Input } from '@/components/ui/input';
 
-export const metadata: Metadata = {
-  title: 'Login',
-  description: 'Sign in to your account to continue.',
-};
+// export const metadata: Metadata = {
+//   title: 'Login',
+//   description: 'Sign in to your account to continue.',
+// };
 
 export default function Login() {
   return (
