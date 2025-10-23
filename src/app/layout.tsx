@@ -28,8 +28,8 @@ const font = FontSans({
 
 export const metadata: Metadata = {
   title: {
-    template: '%s - CreditSwami',
-    default: 'CreditSwami - Smarter choice for your wallet',
+    template: '%s - CardSwami',
+    default: 'CardSwami - Smarter choice for your wallet',
   },
   // description: "India's No.1 Comparison Website",
   metadataBase: new URL(siteConfig.site_domain),
@@ -105,7 +105,7 @@ const Nav = ({ className, children, id }: NavProps) => {
             ))}
           </div>
           <Button asChild className="hidden sm:flex">
-            <Link href={siteConfig.site_domain}>Let&aspo;s Compare</Link>
+            <Link href={siteConfig.site_domain}>Let's Compare</Link>
           </Button>
           <MobileNav />
         </div>

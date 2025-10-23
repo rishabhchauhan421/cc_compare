@@ -3,7 +3,7 @@ import React, { Fragment } from 'react';
 import { Container } from '@/components/craft';
 // import { Footer } from '@/components/footer';
 import { GradientBackground } from '@/components/gradient';
-import { MobileNav } from '@/components/nav/mobile-nav';
+// import { MobileNav } from '@/components/nav/mobile-nav';
 import { Heading, Subheading } from '@/components/text';
 import { db } from '@/db/prismaDb';
 // import { env } from '@/env';
@@ -91,7 +91,10 @@ export default async function Post({ params: paramsPromise }: Args) {
     groceryPointsPer100: 0,
     utilityPointsPer100: 0,
     domesticLounge: 0,
+    domesticGuestLounge: 0,
     internationalLounge: 0,
+    internationalGuestLounge: 0,
+    globalGuestLounge: 0,
     globalLounge: 0,
     loungeAccessTerms: [''],
     perks: [''],
@@ -319,7 +322,6 @@ export default async function Post({ params: paramsPromise }: Args) {
     <main className="overflow-hidden">
       <GradientBackground />
       <Container>
-        <MobileNav />
         <Subheading className="mt-16">
           {dayjs(card1.createdAt).format('dddd, MMMM D, YYYY')}
         </Subheading>
@@ -1373,7 +1375,7 @@ const ComparisonItemRowFullWidth = ({ value }: { value: String }) => {
       >
         <h3>{value}</h3>
       </td>
-      <td />
+      <td className="bg-gray-50 py-2 text-left text-3xl font-semibold text-gray-900 sm:pl-3" />
     </tr>
   );
 };

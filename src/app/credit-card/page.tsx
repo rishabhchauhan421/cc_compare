@@ -80,7 +80,7 @@ export default async function page(props: Args) {
           {/* {dayjs(card1.createdAt).format('dddd, MMMM D, YYYY')} */}
         </Subheading>
         <Heading as="h1" className="mb-10 mt-2">
-          Credit Card Compare
+          Credit Cards
         </Heading>
 
         {/* <article className="pb-16 pt-16"> */}

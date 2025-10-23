@@ -13,6 +13,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       };
     }) ?? [];
 
+  const creditCard = await db.creditCard.findMany({});
+  const creditCardUrls =
+    creditCard.map((card: any) => {
+      return {
+        url: siteConfig.site_domain + `/credit-card/${card.slug}`,
+        lastModified: card.updatedAt,
+      };
+    }) ?? [];
+
   const posts = await getAllPosts();
 
   const staticUrls: MetadataRoute.Sitemap = [
@@ -22,6 +31,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'yearly',
       priority: 1,
     },
+    ...creditCardUrls,
     ...comparisonUrls,
     {
       url: `${siteConfig.site_domain}/posts`,
