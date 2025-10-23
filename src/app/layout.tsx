@@ -105,7 +105,7 @@ const Nav = ({ className, children, id }: NavProps) => {
             ))}
           </div>
           <Button asChild className="hidden sm:flex">
-            <Link href={siteConfig.site_domain}>Let's Compare</Link>
+            <Link href={siteConfig.site_domain}>Lets Compare</Link>
           </Button>
           <MobileNav />
         </div>
